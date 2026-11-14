@@ -89,7 +89,7 @@ fb-negocios/
 > Use `npm run dev` para o servidor reiniciar sozinho quando você salvar o `server.js`.
 
 ### 📸 Foto do José Guilherme
-Copie o arquivo `jose-guilherme.jpg` (da sua pasta Downloads) para `assets/img/time/`. Sem a foto, o card mostra as iniciais "JG".
+A foto do José Guilherme já está em `assets/img/time/jose-guilherme.png` e aparece no card do diretor.
 
 ### Imagens
 - O site funciona mesmo sem rodar `npm run imagens`: ele busca as fotos no site atual como reserva.

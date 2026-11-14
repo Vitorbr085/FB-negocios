@@ -44,7 +44,7 @@ function baixar(url, destino) {
     }
   }
   console.log(`\n${ok} imagens prontas, ${falhas} falhas.`);
-  const jg = path.join(ROOT, "time", "jose-guilherme.jpg");
-  if (!fs.existsSync(jg)) console.log("Lembrete: copie a foto do José Guilherme para assets/img/time/jose-guilherme.jpg");
+  const jg = path.join(ROOT, "time", "jose-guilherme.png");
+  if (!fs.existsSync(jg)) console.log("Lembrete: adicione a foto do José Guilherme em assets/img/time/jose-guilherme.png");
   console.log("Dica: fotos grandes (4000px) deixam o site lento. Veja a seção \"Otimizar imagens\" no README.");
 })();

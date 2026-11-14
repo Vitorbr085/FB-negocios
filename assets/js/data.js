@@ -177,8 +177,7 @@ window.FB_DATA = {
     {
       nome: "José Guilherme", cargo: "Superintendente",
       linkedin: "https://www.linkedin.com/in/jos%C3%A9-guilherme-8a159124a/",
-      // Salve a foto do LinkedIn dele com este nome dentro de assets/img/time/
-      foto: { local: "assets/img/time/jose-guilherme.jpg", remota: "" },
+      foto: { local: "assets/img/time/jose-guilherme.png", remota: "" },
     },
   ],
 
