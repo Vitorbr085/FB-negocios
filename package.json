@@ -1,0 +1,14 @@
+{
+  "name": "fb-negocios",
+  "version": "2.0.0",
+  "description": "Novo site da FB Negócios — promotora de crédito. HTML, CSS e JavaScript puros com servidor Node.js sem dependências.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "imagens": "node scripts/baixar-imagens.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED",
+  "private": true
+}
