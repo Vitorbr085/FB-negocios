@@ -82,18 +82,30 @@
 
     // bancos (faixa) — duplicada para o loop infinito
     const chip = (b) => `<div class="bank-chip" title="${esc(b.nome)}"><img data-bank="${esc(b.logo)}" alt="${esc(b.nome)}" loading="lazy" /></div>`;
-    const chips = D.bancos.map(chip).join("");
+    const chips = D.bancos.filter((b) => b.logo).map(chip).join("");
     $("#banksMarquee").innerHTML = chips + chips;
 
-    // portais
-    $("#portais").innerHTML = D.bancos.map((b) => {
-      const tag = b.portal ? "a" : "div";
-      const attrs = b.portal ? `href="${esc(b.portal)}" target="_blank" rel="noopener"` : "";
-      return `<${tag} class="portal reveal" data-name="${esc(b.nome.toLowerCase())}" ${attrs}>
-        <div class="portal__logo"><img data-bank="${esc(b.logo)}" alt="${esc(b.nome)}" loading="lazy" /></div>
-        <div class="portal__foot"><span>${esc(b.nome)}<br><small>${b.portal ? "Acessar portal" : "Fale com seu gerente"}</small></span>${b.portal ? icon("arrow") : ""}</div>
-      </${tag}>`;
-    }).join("");
+    // portais + telefones de atendimento
+    const sigla = (n) => n.split(/\s+/).filter((w) => w.length > 2 || /^[A-Z0-9]+$/.test(w)).map((w) => /^[A-Z0-9]{2,}$/.test(w) ? w : w[0]).join("").toUpperCase().slice(0, 4).padEnd(2, n.replace(/\W/g, "")[1]?.toUpperCase() || "");
+    const telLink = (t) => {
+      const [rotulo, numero] = t.includes(":") ? t.split(/:\s*/) : ["", t];
+      const digitos = numero.replace(/\D/g, "");
+      return `<li class="portal__tel">
+          <a href="tel:${digitos}" aria-label="Ligar para ${esc(rotulo || numero)} ${esc(numero)}">${icon("phone")}<span>${rotulo ? `<small>${esc(rotulo)}</small>` : ""}${esc(numero)}</span></a>
+          <button type="button" class="portal__copy" data-copy="${esc(numero)}" aria-label="Copiar ${esc(numero)}" title="Copiar número">${icon("copy")}</button>
+        </li>`;
+    };
+    $("#portais").innerHTML = D.bancos.map((b) => `
+      <article class="portal reveal${b.portal ? "" : " portal--contato"}" data-name="${esc((b.nome + " " + b.telefones.join(" ")).toLowerCase())}">
+        <div class="portal__logo">${b.logo ? `<img data-bank="${esc(b.logo)}" alt="${esc(b.nome)}" loading="lazy" />` : `<span class="portal__sigla" aria-hidden="true">${esc(sigla(b.nome))}</span>`}</div>
+        <h3 class="portal__name">${esc(b.nome)}</h3>
+        ${b.telefones.length
+          ? `<ul class="portal__tels">${b.telefones.map(telLink).join("")}</ul>`
+          : `<p class="portal__semtel">Atendimento pelo seu gerente FB</p>`}
+        ${b.portal
+          ? `<a class="portal__go" href="${esc(b.portal)}" target="_blank" rel="noopener">Acessar portal ${icon("arrow")}</a>`
+          : `<span class="portal__go portal__go--off">Sem portal online</span>`}
+      </article>`).join("");
     $$("img[data-bank]").forEach((img) => {
       const nome = img.alt;
       setImg(img, { local: D.bancosPastaLocal + img.dataset.bank, remota: D.bancosPastaRemota + img.dataset.bank },
@@ -329,6 +341,165 @@
     });
   }
 
+  // Copiar telefone do banco
+  function copyPhones() {
+    $("#portais").addEventListener("click", async (e) => {
+      const b = e.target.closest(".portal__copy"); if (!b) return;
+      const n = b.dataset.copy;
+      try { await navigator.clipboard.writeText(n); }
+      catch (_) {
+        const t = document.createElement("textarea"); t.value = n; document.body.append(t); t.select();
+        try { document.execCommand("copy"); } catch (__) {} t.remove();
+      }
+      b.classList.add("is-copied"); setTimeout(() => b.classList.remove("is-copied"), 1600);
+      toast(`Número ${n} copiado!`);
+    });
+  }
+
+  // Quiz "É golpe ou não?"
+  function quizGolpe() {
+    const Q = D.quizGolpe, root = $("#quiz"); if (!Q || !root) return;
+    const stage = $("#quizStage"), actions = $("#quizActions");
+    const bar = $("#quizBar"), count = $("#quizCount"), score = $("#quizScore"), top = $("#quizTop");
+    let ordem = [], i = 0, acertos = 0, travado = false;
+
+    const embaralhar = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((v) => v[1]);
+    const placar = () => {
+      count.textContent = `${Math.min(i + 1, Q.length)} / ${Q.length}`;
+      score.textContent = `${acertos} ${acertos === 1 ? "acerto" : "acertos"}`;
+      bar.style.width = `${(i / Q.length) * 100}%`;
+    };
+
+    function telaInicial() {
+      travado = true; root.classList.add("is-idle"); top.hidden = true; actions.hidden = true;
+      stage.innerHTML = `
+        <div class="qstart">
+          <div class="qstart__icon" aria-hidden="true">${icon("shield")}</div>
+          <h3 class="qstart__title">Você sabe reconhecer um golpe?</h3>
+          <p class="qstart__txt">${Q.length} situações do dia a dia do consignado. Leva menos de 1 minuto e você pode sair quando quiser.</p>
+          <button type="button" class="btn btn--primary btn--lg magnetic" data-start>Começar o teste →</button>
+        </div>`;
+    }
+
+    function carta() {
+      travado = false; root.classList.remove("is-idle"); top.hidden = false; actions.hidden = false; placar();
+      const q = ordem[i];
+      stage.innerHTML = `
+        <div class="qcard" tabindex="0" role="group" aria-label="Situação ${i + 1} de ${Q.length}">
+          <span class="qcard__stamp qcard__stamp--golpe" aria-hidden="true">GOLPE</span>
+          <span class="qcard__stamp qcard__stamp--seguro" aria-hidden="true">SEGURO</span>
+          <span class="qcard__n">Situação ${i + 1}</span>
+          <p class="qcard__txt">${esc(q.texto)}</p>
+          <span class="qcard__hint" aria-hidden="true">← arraste →</span>
+        </div>
+        <div class="qcard qcard--back" aria-hidden="true"></div>`;
+      arrastar($(".qcard", stage));
+    }
+
+    function responder(ans, dir) {
+      if (travado) return; travado = true;
+      const q = ordem[i], ok = ans === q.resposta, card = $(".qcard", stage);
+      if (ok) acertos++;
+      card.style.transition = "transform .5s cubic-bezier(.22,1,.36,1), opacity .5s";
+      card.style.transform = `translateX(${(dir || (ans === "golpe" ? -1 : 1)) * 140}%) rotate(${(dir || (ans === "golpe" ? -1 : 1)) * 18}deg)`;
+      card.style.opacity = "0";
+      actions.hidden = true;
+      setTimeout(() => {
+        score.textContent = `${acertos} ${acertos === 1 ? "acerto" : "acertos"}`;
+        stage.innerHTML = `
+          <div class="qfeed ${ok ? "is-ok" : "is-err"}">
+            <div class="qfeed__icon" aria-hidden="true">${ok ? "✓" : "✕"}</div>
+            <h3 class="qfeed__title">${ok ? "Acertou!" : "Quase!"} Isso é <b>${q.resposta === "golpe" ? "golpe" : "seguro"}</b>.</h3>
+            <p class="qfeed__txt">${esc(q.explicacao)}</p>
+            <button type="button" class="btn btn--primary magnetic" data-next>${i + 1 < Q.length ? "Próxima situação →" : "Ver meu resultado"}</button>
+          </div>`;
+        $("[data-next]", stage).focus({ preventScroll: true });
+      }, 380);
+    }
+
+    function resultado() {
+      bar.style.width = "100%"; actions.hidden = true;
+      count.textContent = `${Q.length} / ${Q.length}`;
+      const pct = acertos / Q.length;
+      const [titulo, txt] = pct === 1 ? ["Expert em segurança!", "Você reconheceu todos os sinais. Compartilhe com quem precisa ficar atento."]
+        : pct >= 0.6 ? ["Mandou bem!", "Você está atento, mas alguns golpes são bem convincentes. Na dúvida, fale com quem é autorizado."]
+        : ["Atenção redobrada!", "Os golpistas são criativos. Antes de contratar, sempre confira quem está do outro lado."];
+      stage.innerHTML = `
+        <div class="qres">
+          <div class="qres__ring" style="--p:${pct}"><span><b>${acertos}</b>/${Q.length}</span></div>
+          <h3 class="qres__title">${titulo}</h3>
+          <p class="qres__txt">${txt}</p>
+          <div class="qres__actions">
+            <a class="btn btn--primary magnetic" href="${waLink(E.whatsapp.numero, "Olá FB Negócios! Fiz o teste de golpes no site e quero contratar com segurança.")}" target="_blank" rel="noopener">${icon("whatsapp")} Falar com a FB</a>
+            <button type="button" class="btn btn--ghost" data-restart>Refazer o teste</button>
+            <button type="button" class="link-btn" data-home>Voltar ao início</button>
+          </div>
+          <p class="qres__note">A FB Negócios é correspondente bancária (Res. 3.954 BACEN) e <b>nunca</b> pede depósito antecipado, senha ou pagamento para liberar crédito.</p>
+        </div>`;
+      if (acertos === Q.length) confete();
+    }
+
+    function confete() {
+      if (reduceMotion) return;
+      const cores = ["#1c2a4b", "#8ea6da", "#ffffff", "#4a6399", "#c3d0ec"];
+      const wrap = document.createElement("div"); wrap.className = "confetti"; wrap.setAttribute("aria-hidden", "true");
+      for (let k = 0; k < 60; k++) {
+        const c = document.createElement("i");
+        c.style.cssText = `left:${Math.random() * 100}%;background:${cores[k % cores.length]};animation-delay:${Math.random() * 0.4}s;--x:${(Math.random() - 0.5) * 200}px;--r:${Math.random() * 720}deg`;
+        wrap.append(c);
+      }
+      root.append(wrap); setTimeout(() => wrap.remove(), 2600);
+    }
+
+    function arrastar(card) {
+      let x0 = 0, y0 = 0, dx = 0, ativo = false;
+      const golpe = $(".qcard__stamp--golpe", card), seguro = $(".qcard__stamp--seguro", card);
+      const pintar = () => {
+        card.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
+        golpe.style.opacity = Math.min(1, Math.max(0, -dx / 110));
+        seguro.style.opacity = Math.min(1, Math.max(0, dx / 110));
+      };
+      card.addEventListener("pointerdown", (e) => {
+        if (travado) return;
+        ativo = true; x0 = e.clientX; y0 = e.clientY; dx = 0;
+        card.setPointerCapture(e.pointerId); card.style.transition = "none"; card.classList.add("is-drag");
+      });
+      card.addEventListener("pointermove", (e) => {
+        if (!ativo) return;
+        dx = e.clientX - x0;
+        if (Math.abs(e.clientY - y0) > Math.abs(dx) * 1.5 && Math.abs(dx) < 10) return;
+        pintar();
+      });
+      const soltar = () => {
+        if (!ativo) return; ativo = false; card.classList.remove("is-drag");
+        if (Math.abs(dx) > 110) responder(dx < 0 ? "golpe" : "seguro", dx < 0 ? -1 : 1);
+        else { card.style.transition = "transform .5s cubic-bezier(.34,1.56,.64,1)"; dx = 0; pintar(); }
+      };
+      card.addEventListener("pointerup", soltar);
+      card.addEventListener("pointercancel", soltar);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") { e.preventDefault(); responder("golpe", -1); }
+        if (e.key === "ArrowRight") { e.preventDefault(); responder("seguro", 1); }
+      });
+    }
+
+    actions.addEventListener("click", (e) => { const b = e.target.closest("[data-ans]"); if (b) responder(b.dataset.ans); });
+    stage.addEventListener("click", (e) => {
+      if (e.target.closest("[data-next]")) { i++; i < Q.length ? carta() : resultado(); }
+      if (e.target.closest("[data-restart]") || e.target.closest("[data-start]")) iniciar();
+      if (e.target.closest("[data-home]")) telaInicial();
+    });
+    $("#quizExit").addEventListener("click", () => {
+      const meio = i < Q.length;
+      telaInicial();
+      if (meio) toast("Teste encerrado. Você pode recomeçar quando quiser.");
+      $("[data-start]", stage).focus({ preventScroll: true });
+    });
+    root.addEventListener("keydown", (e) => { if (e.key === "Escape" && !root.classList.contains("is-idle")) $("#quizExit").click(); });
+    function iniciar() { ordem = embaralhar(Q); i = 0; acertos = 0; carta(); $(".qcard", stage).focus({ preventScroll: true }); }
+    telaInicial();
+  }
+
   // Busca de bancos
   function bankSearch() {
     const input = $("#bankSearch"), empty = $("#portaisVazio");
@@ -336,7 +507,9 @@
       const q = input.value.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
       let n = 0;
       $$(".portal").forEach((p) => {
-        const ok = p.dataset.name.normalize("NFD").replace(/[̀-ͯ]/g, "").includes(q);
+        const nome = p.dataset.name.normalize("NFD").replace(/[̀-ͯ]/g, "");
+        const qd = q.replace(/\D/g, "");
+        const ok = nome.includes(q) || (qd.length >= 3 && nome.replace(/\D/g, "").includes(qd));
         p.classList.toggle("is-hidden", !ok); if (ok) { n++; p.classList.add("is-in"); }
       });
       empty.hidden = n > 0;
@@ -549,17 +722,54 @@
     update();
   }
 
+  /* ================= PAINEL: seções e pré-visualização ================= */
+  const SECOES = { assistente: "#assistente", seguranca: "#seguranca", parceiros: "#parceiros", depoimentos: "#depoimentos", time: "#time", bancos: "#bancos", faq: "#faq" };
+  function aplicarSecoes(cfg) {
+    const sec = (cfg && cfg.secoes) || {};
+    Object.entries(SECOES).forEach(([k, sel]) => {
+      const on = sec[k] !== false, el = $(sel);
+      if (el) el.hidden = !on;
+      $$(`a[href="${sel}"]`).forEach((a) => { const li = a.closest("li"); (li || a).hidden = !on; });
+    });
+  }
+  function temaInicial(cfg) {
+    const pedido = new URLSearchParams(location.search).get("tema");
+    if (pedido && window.FBThemes && window.FBThemes.TEMAS[pedido]) return pedido;
+    return window.FBConfig.temaDoDia(cfg).tema;
+  }
+  function escutarPainel() {
+    addEventListener("message", (e) => {
+      if (e.origin !== location.origin || !e.data || e.data.type !== "fb-preview") return;
+      const cfg = window.FBConfig.mesclar(window.FBConfig.PADRAO, e.data.cfg || {});
+      aplicarSecoes(cfg);
+      if (window.FBThemes) window.FBThemes.aplicar(e.data.tema || window.FBConfig.temaDoDia(cfg).tema, cfg);
+    });
+  }
+
   /* ================= INÍCIO ================= */
-  render();
-  splitPrepare();
-  preloader();
-  observers();
-  header();
-  theme();
-  accordion();
-  bankSearch();
-  wizard();
-  form();
-  microInteractions();
-  parallax();
+  async function boot() {
+    let cfg = null;
+    if (window.FBConfig) {
+      try { cfg = await window.FBConfig.carregar(); window.FBConfig.aplicarConteudo(D, cfg); } catch (_) { cfg = null; }
+    }
+    window.FB_CFG = cfg;
+    render();
+    aplicarSecoes(cfg);
+    splitPrepare();
+    preloader();
+    observers();
+    header();
+    theme();
+    accordion();
+    bankSearch();
+    quizGolpe();
+    copyPhones();
+    wizard();
+    form();
+    microInteractions();
+    parallax();
+    if (cfg && window.FBThemes) window.FBThemes.aplicar(temaInicial(cfg), cfg);
+    escutarPainel();
+  }
+  boot();
 })();

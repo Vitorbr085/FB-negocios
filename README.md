@@ -1,6 +1,6 @@
 # FB Negócios — novo site
 
-Novo site da **FB Negócios**, promotora de crédito e correspondente bancário de Fortaleza-CE, com a nova identidade visual da marca (degradê vermelho → azul-marinho da logo).
+Novo site da **FB Negócios**, promotora de crédito e correspondente bancário de Fortaleza-CE, com a nova identidade visual da marca: azul-marinho (#1C2A4B, o mesmo da fachada) e preto (#0A0A0C, o da farda).
 
 Todo o conteúdo vem do site atual ([fbnegociosbr.com.br](https://www.fbnegociosbr.com.br)), do Instagram [@fbnegociosss](https://www.instagram.com/fbnegociosss/) e do [Linktree](https://linktr.ee/fbnegocioss).
 
@@ -52,22 +52,27 @@ Início · Bancos parceiros · Quem somos · Números · Por que a FB · Serviç
 fb-negocios/
 ├── index.html                  # página principal
 ├── politica-de-privacidade.html
-├── server.js                   # servidor Node (site + API do formulário)
+├── admin.html                  # painel administrativo (endereço secreto)
+├── server.js                   # servidor Node (site, painel, login e API)
 ├── package.json
 ├── robots.txt
 ├── assets/
-│   ├── css/style.css           # todo o visual
+│   ├── css/style.css           # todo o visual do site
+│   ├── css/admin.css           # visual do painel
 │   ├── js/data.js              # ⭐ TODO O CONTEÚDO DO SITE (edite aqui)
 │   ├── js/main.js              # animações e interações
+│   ├── js/config.js            # carrega a configuração salva pelo painel
+│   ├── js/themes.js            # temas sazonais e efeitos
+│   ├── js/admin.js             # lógica do painel
 │   └── img/
-│       ├── logo.svg            # logo vetorizada (círculo com degradê)
+│       ├── logo.svg            # logo vetorizada (FB branco em círculo azul-marinho)
 │       ├── fb-mark.svg         # só o "FB" branco
 │       ├── favicon.svg
 │       ├── time/               # fotos dos diretores
 │       ├── fotos/              # fotos do escritório
 │       └── bancos/             # logos dos bancos
 ├── scripts/baixar-imagens.js   # baixa as imagens do site atual
-└── data/                       # mensagens do formulário (criado sozinho)
+└── data/                       # mensagens, config do painel e senha (criado sozinho, fora do Git)
 ```
 
 ---
@@ -130,6 +135,72 @@ ADMIN_TOKEN=senha-forte npm start
 e acesse `http://localhost:3000/api/contatos?token=senha-forte`.
 
 O servidor valida os campos, limita 5 envios por minuto por IP, tem um campo-armadilha contra robôs e só expõe os arquivos públicos do site.
+
+---
+
+## 🛠 Painel administrativo (`/admin`)
+
+Com o servidor ligado (`npm start`), o terminal mostra o endereço do painel e o login inicial:
+
+```
+  Painel: http://localhost:3000/admin
+  Login do painel: admin / ••••••••  (temporária: troque no painel em Segurança)
+```
+
+Por segurança, o site **não tem link para o painel**: só entra quem conhece o endereço.
+
+**Primeiro acesso (faça nesta ordem):**
+1. Entre com o login mostrado no terminal.
+2. Em **Segurança e backup**, troque a senha temporária (o painel avisa até você trocar).
+3. No mesmo lugar, troque o **endereço secreto do painel** (ex.: `/gestao-fb-k7`). A partir daí, `/admin` mostra "não encontrado" e só você sabe onde fica a entrada. Guarde o endereço nos favoritos.
+
+A senha (criptografada) e o endereço ficam em `data/admin.json`, que não vai para o GitHub. A opção **Manter conectado** guarda o login por 30 dias naquele computador.
+
+Para fixar usuário, senha e endereço pelo servidor (útil ao hospedar):
+
+```bash
+# Windows (PowerShell)
+$env:ADMIN_USER="fulano"; $env:ADMIN_PASSWORD="minha-senha-forte"; $env:ADMIN_PATH="/gestao-fb-k7"; npm start
+# macOS / Linux
+ADMIN_USER=fulano ADMIN_PASSWORD=minha-senha-forte ADMIN_PATH=/gestao-fb-k7 npm start
+```
+
+### Abrir o painel pelo Go Live (Live Server)
+Sem rodar o servidor, clique em **Go Live** no VS Code e abra `admin.html` (ex.: `http://127.0.0.1:5500/admin.html`). O painel entra em **modo local**:
+- o login é conferido no próprio navegador (usuário `admin` e a senha temporária mostrada no terminal ao rodar `npm start`, ou a que você definiu no modo local);
+- temas, agendamento, avisos e contatos ficam salvos **neste navegador**, e o site aberto pelo Go Live já aparece com as mudanças;
+- para publicar de verdade, use **Segurança e backup → Baixar config.json** e coloque o arquivo em `assets/config.json`;
+- mensagens do formulário e o endereço secreto só funcionam com o servidor (`npm start`).
+
+> O modo local é para trabalhar no seu computador. Online, use o servidor (`npm start`), onde a senha fica protegida no servidor.
+
+### O que dá para fazer no painel
+| Área | Recursos |
+|---|---|
+| **Visão geral** | Tema no ar hoje, mensagens novas, próximas datas comemorativas e últimas mensagens |
+| **Temas** | 6 temas com **prévia ao vivo** (computador e celular): Oficial, Clássico, Natal, Carnaval, São João e Halloween. Liga/desliga efeitos, intensidade e modo lanterna |
+| **Agendamento** | Troca o tema sozinho nas datas comemorativas, com linha do tempo do ano |
+| **Conteúdo** | Faixa de aviso no topo, telefones e WhatsApp, e-mails, endereço, "FB em números" e mostrar/esconder seções |
+| **Mensagens** | Contatos do formulário, com filtro, busca, status (nova, em atendimento, concluída), WhatsApp em um clique e exportação para CSV |
+| **Segurança e backup** | Troca de senha, endereço secreto do painel e download/importação do `config.json` |
+
+Tudo é salvo em `data/config.json` e o site aplica na hora. `Ctrl + S` salva.
+
+### Temas sazonais
+| Tema | Efeitos |
+|---|---|
+| 🎄 **Natal** | Neve caindo no topo e na chamada final, pisca-pisca no menu, neve acumulada nos cards e gorro na logo |
+| 🎉 **Carnaval** | Confete caindo, serpentinas, explosão de confete a cada clique e confete em volta da logo |
+| 🌽 **São João** | Bandeirinhas balançando no menu, faíscas de fogueira subindo, xadrez na faixa de números e chapéu de palha na logo |
+| 🎃 **Halloween** | Morcegos voando, lua, neblina, aranha descendo, chapéu de bruxa e **modo lanterna** opcional (o cursor ilumina o topo) |
+| **Clássico** | A identidade antiga (vermelho e azul) |
+
+Os efeitos usam canvas leve: pausam fora da tela e com a aba escondida, são reduzidos no celular e desligados para quem ativa "reduzir movimento" no sistema. O visitante também pode pausá-los pelo botão ✨.
+
+Para ver um tema sem mudar nada no ar, abra o site com `?tema=natal` (ou `carnaval`, `saojoao`, `halloween`, `classico`).
+
+### Site sem servidor (GitHub Pages)
+O painel precisa do `npm start` para salvar. Para publicar no GitHub Pages: configure no painel rodando no seu computador, clique em **Baixar config.json** e coloque o arquivo em `assets/config.json` antes de subir. O site lê esse arquivo automaticamente.
 
 ---
 

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Painel | FB Negócios</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body>
+  <!-- LOGIN -->
+  <main class="login" id="login">
+    <form class="login__card" id="loginForm" novalidate>
+      <img src="assets/img/logo.svg" alt="" width="64" height="64" class="login__logo" />
+      <h1>Painel FB Negócios</h1>
+      <p class="muted">Área restrita do administrador do site.</p>
+      <label class="field">
+        <span>Usuário</span>
+        <input type="text" id="loginUsuario" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+      </label>
+      <label class="field">
+        <span>Senha</span>
+        <div class="pass">
+          <input type="password" id="loginSenha" autocomplete="current-password" required />
+          <button type="button" class="pass__eye" data-eye="loginSenha" aria-label="Mostrar senha">👁</button>
+        </div>
+      </label>
+      <label class="switch login__remember"><input type="checkbox" id="loginLembrar" checked /><span></span> Manter conectado neste computador</label>
+      <p class="err" id="loginErro" role="alert"></p>
+      <button class="btn btn--primary btn--block" type="submit" id="loginBtn">Entrar</button>
+      <p class="login__hint" id="loginHint">Acesso exclusivo da administração da FB Negócios.</p>
+      <a href="./" class="login__back">← Voltar ao site</a>
+    </form>
+  </main>
+
+  <!-- APP -->
+  <div class="app" id="app" hidden>
+    <aside class="side" id="side">
+      <a href="./" target="_blank" rel="noopener" class="side__brand" title="Abrir o site">
+        <img src="assets/img/logo.svg" alt="" width="36" height="36" />
+        <span>FB <b>Painel</b></span>
+      </a>
+      <nav class="side__nav" aria-label="Seções do painel">
+        <button class="side__link is-active" data-view="visao"><span aria-hidden="true">◎</span> Visão geral</button>
+        <button class="side__link" data-view="temas"><span aria-hidden="true">🎨</span> Temas</button>
+        <button class="side__link" data-view="agenda"><span aria-hidden="true">📅</span> Agendamento</button>
+        <button class="side__link" data-view="conteudo"><span aria-hidden="true">✎</span> Conteúdo</button>
+        <button class="side__link" data-view="mensagens"><span aria-hidden="true">✉</span> Mensagens <em class="side__badge" id="badgeNovas" hidden>0</em></button>
+        <button class="side__link" data-view="seguranca"><span aria-hidden="true">🔒</span> Segurança e backup</button>
+      </nav>
+      <div class="side__foot">
+        <a href="./" target="_blank" rel="noopener" class="btn btn--ghost btn--sm btn--block">Ver site ↗</a>
+        <button class="btn btn--text btn--sm btn--block" id="logout">Sair</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="topbar__menu" id="menuBtn" aria-label="Abrir menu">☰</button>
+        <h1 class="topbar__title" id="viewTitle">Visão geral</h1>
+        <span class="status-pill" id="statusTema"></span>
+      </header>
+
+      <div class="local-banner" id="localBanner" hidden>
+        <span>💻 <b>Modo local (Go Live).</b> As alterações ficam salvas neste navegador e aparecem no site aberto pelo Go Live. Para publicar, use <b>Segurança e backup → Baixar config.json</b>. Mensagens do formulário só chegam com o servidor (<code>npm start</code>).</span>
+      </div>
+      <div class="temp-banner" id="tempBanner" hidden>
+        <span>🔑 Você está usando a <b>senha temporária</b>. Troque antes de colocar o site no ar.</span>
+        <button class="btn btn--sm btn--primary" data-goto="seguranca">Trocar agora</button>
+      </div>
+
+      <!-- VISÃO GERAL -->
+      <section class="view is-active" data-view="visao">
+        <div class="kpis">
+          <article class="kpi kpi--accent">
+            <span class="kpi__label">Tema no ar hoje</span>
+            <div class="kpi__tema"><img id="kpiLogo" alt="" width="44" height="44" /><b id="kpiTema">—</b></div>
+            <small id="kpiTemaMotivo"></small>
+          </article>
+          <article class="kpi"><span class="kpi__label">Mensagens novas</span><b class="kpi__n" id="kpiNovas">0</b><small>aguardando retorno</small></article>
+          <article class="kpi"><span class="kpi__label">Mensagens no total</span><b class="kpi__n" id="kpiTotal">0</b><small id="kpiParceiros">—</small></article>
+          <article class="kpi"><span class="kpi__label">Última alteração</span><b class="kpi__n kpi__n--sm" id="kpiAtualizado">—</b><small id="kpiOrigem"></small></article>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h2>Próximas datas comemorativas</h2>
+            <ul class="upcoming" id="proximas"></ul>
+            <button class="btn btn--ghost btn--sm" data-goto="agenda">Gerenciar agendamento</button>
+          </article>
+          <article class="card">
+            <h2>Últimas mensagens</h2>
+            <ul class="mini-leads" id="ultimas"></ul>
+            <button class="btn btn--ghost btn--sm" data-goto="mensagens">Ver todas</button>
+          </article>
+        </div>
+      </section>
+
+      <!-- TEMAS -->
+      <section class="view" data-view="temas">
+        <div class="temas-layout">
+          <div>
+            <p class="lead">Escolha o visual do site. Clique num tema para ver a prévia ao lado e em <b>Salvar e publicar</b> para colocá-lo no ar.</p>
+            <div class="themes" id="themes"></div>
+            <article class="card">
+              <h2>Efeitos</h2>
+              <label class="switch"><input type="checkbox" id="optEfeitos" /><span></span> Ligar efeitos animados do tema (neve, confete, faíscas, morcegos)</label>
+              <div class="row">
+                <span class="row__label">Intensidade</span>
+                <div class="seg" id="optIntensidade" role="radiogroup" aria-label="Intensidade dos efeitos">
+                  <button type="button" data-v="baixa" role="radio">Baixa</button>
+                  <button type="button" data-v="media" role="radio">Média</button>
+                  <button type="button" data-v="alta" role="radio">Alta</button>
+                </div>
+              </div>
+              <label class="switch"><input type="checkbox" id="optDesligar" /><span></span> Mostrar ao visitante o botão “pausar efeitos”</label>
+              <label class="switch"><input type="checkbox" id="optLanterna" /><span></span> Modo lanterna no Halloween (o topo fica escuro e o cursor ilumina)</label>
+            </article>
+          </div>
+          <div class="preview card">
+            <div class="preview__bar">
+              <b>Prévia ao vivo</b>
+              <div class="seg seg--sm" id="previewDevice" role="radiogroup" aria-label="Tamanho da prévia">
+                <button type="button" data-v="desktop" class="is-on" role="radio">🖥 Computador</button>
+                <button type="button" data-v="mobile" role="radio">📱 Celular</button>
+              </div>
+            </div>
+            <div class="preview__frame" id="previewWrap">
+              <iframe id="preview" title="Prévia do site" src="./?preview=1" loading="lazy"></iframe>
+            </div>
+            <p class="preview__note">A prévia mostra o tema selecionado mesmo antes de salvar.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- AGENDAMENTO -->
+      <section class="view" data-view="agenda">
+        <article class="card">
+          <label class="switch switch--lg"><input type="checkbox" id="agAtivo" /><span></span> Trocar o tema automaticamente nas datas comemorativas</label>
+          <p class="muted small">Fora dessas datas, o site usa o tema escolhido em <b>Temas</b>. Se dois períodos se cruzarem, vale o primeiro da lista.</p>
+          <div class="timeline" id="timeline" aria-hidden="true"></div>
+          <div class="rules" id="regras"></div>
+          <button class="btn btn--ghost btn--sm" id="addRegra">+ Adicionar período</button>
+          <p class="tip">💡 O Carnaval muda de data todo ano. Em 2027 ele vai de 6 a 9 de fevereiro: lembre-se de ajustar o período a cada ano.</p>
+        </article>
+      </section>
+
+      <!-- CONTEÚDO -->
+      <section class="view" data-view="conteudo">
+        <div class="grid-2">
+          <article class="card">
+            <h2>Faixa de aviso no topo</h2>
+            <label class="switch"><input type="checkbox" id="avAtivo" /><span></span> Mostrar faixa de aviso</label>
+            <label class="switch"><input type="checkbox" id="avTema" /><span></span> Nas datas comemorativas, usar a mensagem do tema</label>
+            <label class="field"><span>Mensagem</span><input id="avTexto" maxlength="160" placeholder="Ex.: Atendimento especial neste sábado das 8h às 12h" /><small class="count" data-count-for="avTexto"></small></label>
+            <label class="field"><span>Link (opcional)</span><input id="avLink" placeholder="#contato ou https://..." /></label>
+            <div class="announce-preview" id="avPreview"></div>
+          </article>
+          <article class="card">
+            <h2>Seções do site</h2>
+            <p class="muted small">Desligue uma seção para escondê-la do site (e do menu) sem apagar nada.</p>
+            <div class="toggles" id="secoes"></div>
+          </article>
+          <article class="card">
+            <h2>Contatos</h2>
+            <div class="form-grid">
+              <label class="field"><span>Telefone (exibição)</span><input id="ctTelefone" placeholder="0800 878 0163" /></label>
+              <label class="field"><span>WhatsApp principal</span><input id="ctWpp" inputmode="numeric" placeholder="5585999999999" /></label>
+              <label class="field"><span>WhatsApp “Entre em contato”</span><input id="ctWppContato" inputmode="numeric" /></label>
+              <label class="field"><span>WhatsApp de parceiros</span><input id="ctWppParceiro" inputmode="numeric" /></label>
+              <label class="field"><span>E-mail de contato</span><input id="ctEmail" type="email" /></label>
+              <label class="field"><span>E-mail do SAC</span><input id="ctSac" type="email" /></label>
+              <label class="field field--full"><span>Endereço</span><input id="ctEndereco" /></label>
+            </div>
+            <p class="muted small">WhatsApp com DDI e DDD, só números (ex.: 5585996732850). O site formata sozinho.</p>
+          </article>
+          <article class="card">
+            <h2>FB em números</h2>
+            <div class="nums" id="numeros"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- MENSAGENS -->
+      <section class="view" data-view="mensagens">
+        <article class="card">
+          <div class="leads-bar">
+            <div class="seg seg--sm" id="leadFiltro" role="radiogroup" aria-label="Filtrar mensagens">
+              <button type="button" data-v="todos" class="is-on" role="radio">Todas</button>
+              <button type="button" data-v="novo" role="radio">Novas</button>
+              <button type="button" data-v="em-atendimento" role="radio">Em atendimento</button>
+              <button type="button" data-v="concluido" role="radio">Concluídas</button>
+            </div>
+            <input type="search" id="leadBusca" placeholder="Buscar por nome, cidade ou telefone" aria-label="Buscar mensagens" />
+            <button class="btn btn--ghost btn--sm" id="leadCsv">⤓ Exportar CSV</button>
+            <button class="btn btn--text btn--sm" id="leadRefresh" aria-label="Atualizar">↻</button>
+          </div>
+          <div class="table-wrap">
+            <table class="leads">
+              <thead><tr><th>Data</th><th>Nome</th><th>Tipo</th><th>Contato</th><th>Cidade</th><th>Mensagem</th><th>Status</th></tr></thead>
+              <tbody id="leads"></tbody>
+            </table>
+          </div>
+          <p class="empty" id="leadsVazio" hidden>Nenhuma mensagem por aqui ainda.</p>
+        </article>
+      </section>
+
+      <!-- SEGURANÇA -->
+      <section class="view" data-view="seguranca">
+        <div class="grid-2">
+          <form class="card" id="senhaForm" novalidate>
+            <h2>Trocar senha</h2>
+            <label class="field"><span>Senha atual</span><input type="password" id="sAtual" autocomplete="current-password" /></label>
+            <label class="field"><span>Nova senha (mínimo 8 caracteres)</span><input type="password" id="sNova" autocomplete="new-password" minlength="8" /></label>
+            <div class="meter"><span id="sMeter"></span></div>
+            <label class="field"><span>Repita a nova senha</span><input type="password" id="sNova2" autocomplete="new-password" /></label>
+            <p class="err" id="senhaErro" role="alert"></p>
+            <button class="btn btn--primary" type="submit">Salvar nova senha</button>
+          </form>
+          <form class="card" id="caminhoForm" novalidate>
+            <h2>Endereço secreto do painel</h2>
+            <p class="muted small">Só quem souber este endereço chega à tela de login. Os outros endereços, inclusive <code>/admin</code>, mostram “não encontrado”.</p>
+            <label class="field"><span>Endereço atual</span>
+              <div class="addr"><span class="addr__host" id="caminhoHost"></span><input id="caminhoNovo" placeholder="gestao-fb-k7" autocapitalize="none" spellcheck="false" maxlength="40" /></div>
+            </label>
+            <p class="err" id="caminhoErro" role="alert"></p>
+            <div class="btn-row">
+              <button class="btn btn--primary" type="submit">Salvar endereço</button>
+              <button class="btn btn--ghost" type="button" id="caminhoSugerir">Sugerir um</button>
+            </div>
+            <p class="muted small">Depois de salvar, o painel abre no endereço novo. Guarde-o nos favoritos e não compartilhe.</p>
+          </form>
+          <article class="card">
+            <h2>Backup da configuração</h2>
+            <p class="muted small">Baixe tudo o que foi configurado no painel (temas, agenda, avisos, contatos) num arquivo. Use para guardar uma cópia ou levar para outro servidor.</p>
+            <div class="btn-row">
+              <button class="btn btn--ghost" id="exportar">⤓ Baixar config.json</button>
+              <label class="btn btn--ghost">⤒ Importar arquivo<input type="file" id="importar" accept="application/json,.json" hidden /></label>
+            </div>
+            <h3>Site sem servidor (GitHub Pages)</h3>
+            <p class="muted small">Sem o <code>npm start</code>, o painel não consegue salvar. Nesse caso, configure aqui, baixe o <code>config.json</code> e coloque-o na pasta <code>assets/</code> do projeto antes de publicar.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Barra de salvar -->
+  <div class="savebar" id="savebar" role="region" aria-label="Alterações pendentes">
+    <span><b>Alterações não salvas</b> <span class="muted" id="saveResumo"></span></span>
+    <div class="btn-row">
+      <button class="btn btn--text" id="descartar">Descartar</button>
+      <button class="btn btn--primary" id="salvar">Salvar e publicar</button>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/themes.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

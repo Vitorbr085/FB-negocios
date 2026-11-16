@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FB Negócios | Promotora de Crédito em Fortaleza — Consignado, Portabilidade e FGTS</title>
+  <title>FB Negócios </title>
   <meta name="description" content="FB Negócios: promotora de crédito e correspondente bancário. Consignado INSS, LOAS, refinanciamento, portabilidade, Saque FGTS, crédito CLT e empréstimo na conta de energia. Seja parceiro FB." />
-  <meta name="theme-color" content="#0B0A24" />
+  <meta name="theme-color" content="#0A0A0C" />
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
 
   <meta property="og:type" content="website" />
@@ -204,10 +204,32 @@
       </div>
     </section>
 
-    <!-- FAIXA FB GIGANTE -->
-    <section class="big-band" aria-hidden="true">
-      <div class="big-band__row" data-band="1">FB NEGÓCIOS · CONSIGNADO · PORTABILIDADE · REFINANCIAMENTO · FGTS · CLT · FB NEGÓCIOS · CONSIGNADO · PORTABILIDADE ·</div>
-      <div class="big-band__row big-band__row--outline" data-band="-1">VEM SER FB · +2 MIL CORBANS · R$ 70 MI POR MÊS · VEM SER FB · +2 MIL CORBANS · R$ 70 MI POR MÊS ·</div>
+    <!-- QUIZ: É GOLPE OU NÃO? -->
+    <section class="section quiz-sec" id="seguranca">
+      <div class="container quiz-grid">
+        <div class="quiz-intro">
+          <span class="eyebrow reveal">Segurança em primeiro lugar</span>
+          <h2 class="section-title reveal">É golpe <span class="grad">ou não?</span></h2>
+          <p class="reveal muted">Golpes no consignado fazem vítimas todos os dias. Teste se você sabe reconhecer os sinais: arraste o cartão para o lado ou use os botões.</p>
+          <ul class="quiz-legend reveal" aria-hidden="true">
+            <li><span class="quiz-key quiz-key--golpe">←</span> Golpe</li>
+            <li><span class="quiz-key quiz-key--seguro">→</span> Seguro</li>
+          </ul>
+        </div>
+        <div class="quiz reveal" id="quiz" aria-live="polite">
+          <div class="quiz__top" id="quizTop">
+            <span class="quiz__count" id="quizCount">1 / 8</span>
+            <div class="quiz__bar"><span id="quizBar"></span></div>
+            <span class="quiz__score" id="quizScore">0 acertos</span>
+            <button type="button" class="quiz__exit" id="quizExit" aria-label="Sair do teste e voltar ao início"><span aria-hidden="true">✕</span> Sair</button>
+          </div>
+          <div class="quiz__stage" id="quizStage"></div>
+          <div class="quiz__actions" id="quizActions">
+            <button type="button" class="quiz__btn quiz__btn--golpe" data-ans="golpe"><span aria-hidden="true">✕</span> É golpe</button>
+            <button type="button" class="quiz__btn quiz__btn--seguro" data-ans="seguro"><span aria-hidden="true">✓</span> É seguro</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- PARCEIROS / DIGITAIS DE ELITE -->
@@ -444,10 +466,13 @@
     <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
     <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></symbol>
   </svg>
 
   <script src="assets/js/data.js"></script>
+  <script src="assets/js/config.js" defer></script>
+  <script src="assets/js/themes.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
