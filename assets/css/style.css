@@ -989,3 +989,6 @@ html.fx-on[data-skin="carnaval"] .footer::before { height: 24px; background: url
 /* Ajustes: bandeirinhas por cima dos blocos e sem a faixa colorida no rodapé do Carnaval */
 html.fx-on[data-skin="saojoao"] .section::after { z-index: 3; }
 .fx-scene--carnaval::after { display: none; }
+/* personagem da faixa de números acompanha o quadro (largura máxima), em qualquer zoom */
+.stats > .fx-char--sentado.fx-char--dir { right: calc((100% - min(1200px, 100% - 40px)) / 2 + 36px); }
+.stats > .fx-char--sentado.fx-char--esq { left: calc((100% - min(1200px, 100% - 40px)) / 2 + 36px); }

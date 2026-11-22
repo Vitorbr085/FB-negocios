@@ -1,0 +1,38 @@
+{
+  "versao": 1,
+  "tema": {
+    "ativo": "oficial",
+    "efeitos": true,
+    "intensidade": "alta",
+    "permitirDesligar": true,
+    "agendamento": {
+      "ativo": true,
+      "regras": [
+        { "tema": "carnaval", "inicio": "05-02", "fim": "10-02", "ativa": true },
+        { "tema": "saojoao", "inicio": "01-06", "fim": "30-06", "ativa": true },
+        { "tema": "halloween", "inicio": "24-10", "fim": "31-10", "ativa": true },
+        { "tema": "natal", "inicio": "01-12", "fim": "26-12", "ativa": true }
+      ]
+    },
+    "lanterna": false
+  },
+  "aviso": {
+    "ativo": true,
+    "usarMensagemDoTema": true,
+    "texto": "",
+    "link": ""
+  },
+  "empresa": {},
+  "numeros": null,
+  "secoes": {
+    "assistente": true,
+    "seguranca": true,
+    "parceiros": true,
+    "depoimentos": true,
+    "time": true,
+    "bancos": true,
+    "fbinforma": true,
+    "faq": true
+  },
+  "atualizadoEm": "2026-11-22T02:30:00.000Z"
+}
