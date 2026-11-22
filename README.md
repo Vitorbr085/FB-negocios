@@ -39,6 +39,7 @@ Início (com fotos da equipe) · Bancos parceiros · Quem somos · Números · P
 
 ### Extras
 - Tema escuro (padrão) e claro, lembrados no navegador.
+- Em telas bem largas (a partir de 1500 px, como monitores grandes ou zoom afastado), a coluna do site passa de 1200 para 1360 px, com margens menores. No tamanho normal nada muda.
 - Funciona bem no celular; respeita quem ativa "reduzir movimento" no sistema.
 - SEO: título, descrição, Open Graph e dados estruturados (schema.org).
 - Links para WhatsApp, Instagram, LinkedIn, TikTok, Portal FB e Comunidade do WhatsApp.
@@ -65,6 +66,7 @@ fb-negocios/
 │   ├── js/config.js            # carrega a configuração salva pelo painel
 │   ├── js/themes.js            # temas sazonais e efeitos
 │   ├── js/admin.js             # lógica do painel
+│   ├── config.json             # configuração publicada (tema, agendamento, avisos)
 │   └── img/
 │       ├── logo.svg            # logo vetorizada (FB branco em círculo azul-marinho)
 │       ├── fb-mark.svg         # só o "FB" branco
@@ -209,7 +211,9 @@ Os efeitos usam canvas leve: pausam fora da tela e com a aba escondida, são red
 Para ver um tema sem mudar nada no ar, abra o site com `?tema=natal` (ou `carnaval`, `saojoao`, `halloween`, `classico`).
 
 ### Site sem servidor (GitHub Pages)
-O painel precisa do `npm start` para salvar. Para publicar no GitHub Pages: configure no painel rodando no seu computador, clique em **Baixar config.json** e coloque o arquivo em `assets/config.json` antes de subir. O site lê esse arquivo automaticamente.
+O repositório já traz um `assets/config.json` pronto: tema **Oficial** com o agendamento das datas ligado (Carnaval, São João, Halloween e Natal), efeitos em intensidade alta e faixa de aviso com a mensagem do tema. Ele deixa `empresa` vazio e `numeros` como `null`, então os e-mails, telefones e números vêm sempre do `data.js`.
+
+O painel precisa do `npm start` para salvar. Para publicar outras escolhas no GitHub Pages: configure no painel rodando no seu computador, clique em **Baixar config.json** e coloque o arquivo em `assets/config.json` antes de subir. O site lê esse arquivo automaticamente.
 
 ---
 
