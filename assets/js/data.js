@@ -25,15 +25,15 @@ window.FB_DATA = {
     mensagemWhatsapp: "Olá FB Negócios",
     endereco: "R. 111, N 11 Altos, Conjunto Ceará, Fortaleza-CE",
     mapsLink: "https://www.google.com/maps/search/?api=1&query=R.+111%2C+11+Conjunto+Cear%C3%A1%2C+Fortaleza+-+CE",
-    // No site atual os e-mails aparecem como "contato@FB Negóciosbr.com.br" (erro de digitação).
+    // E-mail de contato confirmado pela FB. DPO conforme a Política de Privacidade.
     emails: {
-      contato: "contato@fbnegociosbr.com.br", // CONFIRMAR
-      sac: "sac@fbnegociosbr.com.br",         // CONFIRMAR
-      dpo: "lucasbessa@fbnegociosbr.com.br",  // CONFIRMAR
+      contato: "contato@finanbankbr.com.br",
+      sac: "",                                // deixe vazio para não exibir; preencha quando houver
+      dpo: "lucasbessa@finanbankbr.com.br",
     },
     cnpj: "46.373.165/0001-00",
     grupo: { nome: "Grupo FB Negócios", cnpj: "54.540.530/0001-26" },
-    portal: "https://portalfb.base44.app/",
+    portal: "https://finanbankportal.base44.app/", // Portal FB (notícias e indicadores) — mesmo link do Linktree
     comunidadeWhatsapp: "https://chat.whatsapp.com/EZOZi9XEFrF7rpmH6v7fB7",
     redes: {
       instagram: "https://www.instagram.com/fbnegociosss/",
@@ -47,23 +47,35 @@ window.FB_DATA = {
   heroPalavras: ["consignado", "portabilidade", "refinanciamento", "Saque FGTS", "crédito CLT"],
 
   numeros: [
-    { valor: 3000, prefixo: "", sufixo: "", rotulo: "Parceiros felizes" },
+    { valor: 2000, prefixo: "+", sufixo: "", rotulo: "Parceiros cadastrados" },
     { valor: 70, prefixo: "R$ ", sufixo: " mi", rotulo: "Produção mensal" },
     { valor: 180, prefixo: "", sufixo: "", rotulo: "Funcionários" },
-    { valor: 300, prefixo: "", sufixo: "%", rotulo: "De crescimento nos últimos anos" },
+    { valor: 490, prefixo: "", sufixo: "%", rotulo: "De crescimento nos últimos anos" },
   ],
 
   sobre: {
     titulo: "O melhor e mais preparado time de suporte",
     texto:
-      "Diferentemente das demais, a FB Negócios possui um ambiente descontraído e receptivo, com o intuito de motivar o time e promover o melhor atendimento para com nossos parceiros.",
+      "Na FB Negócios, conectamos pessoas, parceiros e oportunidades através de soluções inteligentes no mercado consignado. Com um time especializado, suporte próximo e as melhores taxas, seguimos crescendo e transformando resultados todos os dias.",
+    texto2:
+      "Diferentemente das demais, a FB Negócios possui um ambiente descontraído e receptivo, com o intuito de motivar o time e promover o melhor atendimento para com nossos parceiros. De ponta a ponta, a FB preza por qualidade.",
     valores: ["Respeito", "Transparência", "Foco no Cliente", "Trabalho em Equipe"],
     fotos: {
-      principal: { local: "assets/img/fotos/about.jpg", remota: SITE_ATUAL + "about.jpg" },
+      principal: { local: "assets/img/topo/equipe.jpg", remota: SITE_ATUAL + "about.jpg" },
       sala: { local: "assets/img/fotos/sala.jpg", remota: SITE_ATUAL + "sala.jpg" },
       call: { local: "assets/img/fotos/call.jpg", remota: SITE_ATUAL + "call.jpg" },
     },
   },
+
+  /* Fotos que passam no fundo do topo do site (cenas do vídeo institucional, sem legendas,
+     e as fotos do topo do site antigo). Ficam em assets/img/topo/. */
+  topo: [
+    { src: "assets/img/topo/sala-reuniao.jpg", alt: "Sala de reunião FinanBank", pos: "50% 42%" },
+    { src: "assets/img/topo/comercial.jpg", alt: "Setor comercial", pos: "62% 35%" },
+    { src: "assets/img/topo/atendimento.jpg", alt: "Atendimento aos parceiros", pos: "55% 40%" },
+    { src: "assets/img/bastidores/operacional.jpg", alt: "Setor operacional", pos: "45% 45%" },
+    { src: "assets/img/bastidores/rh.jpg", alt: "Recursos Humanos", pos: "58% 35%" },
+  ],
 
   diferenciais: [
     { icone: "team", titulo: "Equipe Qualificada", texto: "Equipe altamente treinada pelos melhores gerentes do setor de consignado do Brasil." },
@@ -140,7 +152,7 @@ window.FB_DATA = {
   parceria: {
     titulo: "Seja nosso parceiro!",
     texto: "Preencha o formulário e nosso gerente comercial irá entrar em contato com você.",
-    destaque: "+2 mil CORBANs já estão produzindo conosco. E você?",
+    destaque: "Ecossistema completo para CORBANs: mais de 2.000 parceiros cadastrados já produzem conosco. E você?",
     passos: [
       { titulo: "Cadastro", texto: "Envie seus dados pelo formulário ou WhatsApp." },
       { titulo: "Gerente dedicado", texto: "Um gerente comercial entra em contato com você." },
@@ -155,6 +167,33 @@ window.FB_DATA = {
     { nome: "João da Costa", perfil: "Aposentado", texto: "Gostei muito do atendimento" },
     { nome: "Silvia Maria", perfil: "Aposentada", texto: "O dinheiro caiu muito rapido na minha conta" },
   ],
+
+  /* Feedbacks de parceiros (CORBANs) — vindos do destaque "Feedbacks" do Instagram.
+     O site original tinha os depoimentos escritos direto no código (não puxava de nenhum lugar). */
+  feedbacksParceiros: {
+    video: "https://www.instagram.com/fbnegociosss/reel/DfGCrb5CrAN/",
+    lista: [
+      { nome: "Rebeca Lima", empresa: "RI Consignações", cidade: "Fortaleza-CE", hora: "15:04",
+        destaque: "1 mês de parceria",
+        mensagens: ["Boa tarde! Me chamo Rebeca, sou de Fortaleza, Ceará!", "RI Consignações: 1 mês com a FB e muito feliz com essa parceria."] },
+      { nome: "Rebeca Lima", empresa: "RI Consignações", cidade: "Fortaleza-CE", hora: "14:56",
+        destaque: "1º contrato pago em apenas 2 semanas operando conosco!",
+        mensagens: ["Sim sim 😊 Estou muito feliz!! E grata ao seu apoio e suporte do time.", "Que seja primeiro de muitos 🙏"],
+        resposta: { nome: "Mateus Mota", cargo: "Gerente Comercial FB", texto: "Eu que agradeço, minha querida, e vamos pra cima que tá só começando 🚀" } },
+    ],
+  },
+
+  /* FB Informa — conteúdos para CORBANs (posts do Instagram) + Portal FB */
+  fbInforma: {
+    titulo: "FB Informa",
+    texto: "Notícias de consignado, crédito e juros, mudanças nas regras e dicas para a sua operação — tudo no Portal FB.",
+    destaques: [
+      { data: "16/11/2026", tag: "Gestão", titulo: "Fim da escala 6x1: sua operação está preparada?", link: "https://www.instagram.com/fbnegociosss/p/Df0MoD8l4_N/" },
+      { data: "03/11/2026", tag: "INSS", titulo: "Portabilidade INSS ganha etapa obrigatória de confirmação no Meu INSS", link: "https://www.instagram.com/fbnegociosss/p/DfSvwfIl42N/" },
+      { data: "05/11/2026", tag: "Juros", titulo: "Copom decide manter a taxa Selic", link: "https://www.instagram.com/fbnegociosss/p/DfXI8J4RMTA/" },
+      { data: "06/11/2026", tag: "Mercado", titulo: "C6 Consig: escala, tecnologia e distribuição no consignado", link: "https://www.instagram.com/fbnegociosss/p/DfahPHjF-3A/" },
+    ],
+  },
 
   /* Time de diretores. "foto.local" é a cópia dentro do projeto
      (baixe com `npm run imagens`); "foto.remota" é usada se a local faltar. */

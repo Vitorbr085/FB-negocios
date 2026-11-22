@@ -39,7 +39,7 @@
     numeros: null,               // null = usa os números de data.js
     secoes: {
       assistente: true, seguranca: true, parceiros: true, depoimentos: true,
-      time: true, bancos: true, faq: true,
+      time: true, bancos: true, fbinforma: true, faq: true,
     },
     atualizadoEm: null,
   };

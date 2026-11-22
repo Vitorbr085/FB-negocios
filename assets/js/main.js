@@ -1,7 +1,7 @@
 /* =====================================================================
    FB NEGÓCIOS — INTERAÇÕES
    1. Renderização do conteúdo (data.js)
-   2. Microinterações: cursor, botões magnéticos, ripple, tilt 3D, form
+   2. Microinterações: botões magnéticos, ripple, tilt 3D, form
    3. Transições: preloader, texto letra a letra, reveal, contadores,
       menu, acordeão, troca de tema em círculo, assistente
    4. Parallax: blobs, cards, imagens, faixa gigante, orbe da logo
@@ -49,6 +49,7 @@
 
     $("#sobreTitulo").textContent = D.sobre.titulo;
     $("#sobreTexto").textContent = D.sobre.texto;
+    if ($("#sobreTexto2")) $("#sobreTexto2").textContent = D.sobre.texto2 || "";
     $("#missao").textContent = E.missao;
     $("#valores").innerHTML = D.sobre.valores.map((v) => `<li>${esc(v)}</li>`).join("");
     $$("[data-foto]").forEach((img) => setImg(img, D.sobre.fotos[img.dataset.foto]));
@@ -131,6 +132,37 @@
     const qs = D.depoimentos.map(q).join("");
     $("#depoimentos-track").innerHTML = qs + qs + qs;
 
+    // feedbacks de parceiros (estilo conversa de WhatsApp)
+    const FP = D.feedbacksParceiros;
+    if (FP && $("#feedbacksParceiros")) {
+      $("#feedVideo").href = FP.video;
+      $("#feedbacksParceiros").innerHTML = FP.lista.map((f, i) => `
+        <article class="chat reveal" style="--d:${i}">
+          <header class="chat__head"><span class="chat__avatar">${initials(f.nome)}</span><div><b>${esc(f.nome)}</b><small>${esc(f.empresa)} · ${esc(f.cidade)}</small></div><span class="chat__badge">✓ Parceiro FB</span></header>
+          <p class="chat__destaque">“${esc(f.destaque)}”</p>
+          <div class="chat__body">
+            ${f.mensagens.map((m, k) => `<div class="bubble bubble--in" style="--k:${k}">${esc(m)}<time>${esc(f.hora)}</time></div>`).join("")}
+            ${f.resposta ? `<div class="bubble bubble--out" style="--k:${f.mensagens.length}"><small>${esc(f.resposta.nome)} · ${esc(f.resposta.cargo)}</small>${esc(f.resposta.texto)}<time>${esc(f.hora)} ✓✓</time></div>` : ""}
+          </div>
+        </article>`).join("");
+    }
+
+    // FB Informa
+    if (D.fbInforma && $("#infoLista")) {
+      $("#infoLista").innerHTML = D.fbInforma.destaques.map((n, i) => `
+        <li class="reveal" style="--d:${i}"><a href="${esc(n.link)}" target="_blank" rel="noopener" class="info-item">
+          <span class="info-item__tag">${esc(n.tag)}</span>
+          <b>${esc(n.titulo)}</b>
+          <small>${esc(n.data)} · ver no Instagram ↗</small>
+        </a></li>`).join("");
+    }
+
+    // fotos do topo
+    if (D.topo && $("#heroFotos")) {
+      $("#heroFotos").innerHTML = D.topo.map((f, i) => `<img src="${esc(f.src)}" alt="" class="${i === 0 ? "is-on" : ""}" ${f.pos ? `style="object-position:${esc(f.pos)}"` : ""} ${i ? 'loading="lazy"' : ""} />`).join("");
+      $$("#heroFotos img").forEach((img) => img.addEventListener("error", () => img.remove(), { once: true }));
+    }
+
     // time de diretores
     $("#diretores").innerHTML = D.diretores.map((p, i) => `
       <article class="member reveal" style="--d:${i}">
@@ -159,7 +191,7 @@
       <li>${icon("pin")}<a href="${esc(E.mapsLink)}" target="_blank" rel="noopener">${esc(E.endereco)}</a></li>
       <li>${icon("phone")}<a href="tel:${E.telefoneLink}">${esc(E.telefone)}</a></li>
       <li>${icon("mail")}<a href="mailto:${esc(E.emails.contato)}">${esc(E.emails.contato)}</a></li>
-      <li>${icon("mail")}<span>SAC: <a href="mailto:${esc(E.emails.sac)}">${esc(E.emails.sac)}</a></span></li>
+      ${E.emails.sac ? `<li>${icon("mail")}<span>SAC: <a href="mailto:${esc(E.emails.sac)}">${esc(E.emails.sac)}</a></span></li>` : ""}
       <li>${icon("shield")}<span>DPO: <a href="mailto:${esc(E.emails.dpo)}">${esc(E.emails.dpo)}</a></span></li>
       <li>${icon("doc")}<span>CNPJ: ${esc(E.cnpj)}</span></li>`;
     $("#bacen").innerHTML = `<h4>⚠ ${esc(D.bacen.titulo)}</h4><p>${esc(D.bacen.texto)}</p><p><b>NÃO ESTÁ AUTORIZADA A:</b></p><ul>${D.bacen.naoAutorizada.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
@@ -290,7 +322,7 @@
       last = y;
       const max = document.documentElement.scrollHeight - innerHeight;
       bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
-      wa.classList.toggle("is-visible", y > 500);
+      wa?.classList.toggle("is-visible", y > 500);
       let cur = null;
       sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.4) cur = s; });
       links.forEach((l) => l.classList.toggle("is-active", cur && l.getAttribute("href") === "#" + cur.id));
@@ -500,6 +532,18 @@
     telaInicial();
   }
 
+  // Fotos do topo trocando suavemente (efeito Ken Burns)
+  function heroSlides() {
+    const box = $("#heroFotos"); if (!box || reduceMotion) return;
+    let i = 0;
+    setInterval(() => {
+      const fotos = $$("img", box); if (fotos.length < 2 || document.hidden) return;
+      fotos[i % fotos.length].classList.remove("is-on");
+      i = (i + 1) % fotos.length;
+      fotos[i].classList.add("is-on");
+    }, 6000);
+  }
+
   // Busca de bancos
   function bankSearch() {
     const input = $("#bankSearch"), empty = $("#portaisVazio");
@@ -653,18 +697,6 @@
 
     if (!finePointer || reduceMotion) return;
 
-    // Cursor
-    const cur = $(".cursor"), dot = $(".cursor__dot"), ring = $(".cursor__ring");
-    let mx = -100, my = -100, rx = -100, ry = -100;
-    addEventListener("pointermove", (e) => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate3d(${mx}px,${my}px,0)`; }, { passive: true });
-    const loop = () => { rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18; ring.style.transform = `translate3d(${rx}px,${ry}px,0)`; requestAnimationFrame(loop); };
-    loop();
-    document.addEventListener("pointerover", (e) => cur.classList.toggle("is-hover", !!e.target.closest("a, button, input, textarea, select, label, .service")));
-    addEventListener("pointerdown", () => cur.classList.add("is-down"));
-    addEventListener("pointerup", () => cur.classList.remove("is-down"));
-    document.addEventListener("mouseleave", () => (cur.style.opacity = 0));
-    document.addEventListener("mouseenter", () => (cur.style.opacity = 1));
-
     // Botões magnéticos (delegação: funciona também nos criados depois)
     document.addEventListener("pointermove", (e) => {
       $$(".magnetic.is-mag").forEach((m) => { if (!m.contains(e.target)) { m.classList.remove("is-mag"); m.style.transform = ""; } });
@@ -723,7 +755,7 @@
   }
 
   /* ================= PAINEL: seções e pré-visualização ================= */
-  const SECOES = { assistente: "#assistente", seguranca: "#seguranca", parceiros: "#parceiros", depoimentos: "#depoimentos", time: "#time", bancos: "#bancos", faq: "#faq" };
+  const SECOES = { assistente: "#assistente", seguranca: "#seguranca", parceiros: "#parceiros", depoimentos: "#depoimentos", time: "#time", bancos: "#bancos", fbinforma: "#fbinforma", faq: "#faq" };
   function aplicarSecoes(cfg) {
     const sec = (cfg && cfg.secoes) || {};
     Object.entries(SECOES).forEach(([k, sel]) => {
@@ -762,6 +794,7 @@
     theme();
     accordion();
     bankSearch();
+    heroSlides();
     quizGolpe();
     copyPhones();
     wizard();

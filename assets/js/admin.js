@@ -14,7 +14,7 @@
 
   const SECOES = [
     ["assistente", "Assistente “Qual crédito é ideal?”"], ["seguranca", "Quiz “É golpe ou não?”"], ["parceiros", "Para CORBANs / Digitais de Elite"],
-    ["depoimentos", "Depoimentos"], ["time", "Time de diretores"], ["bancos", "Contatos dos bancos"], ["faq", "Perguntas frequentes"],
+    ["depoimentos", "Depoimentos e feedbacks de parceiros"], ["time", "Time de diretores"], ["bancos", "Contatos dos bancos"], ["fbinforma", "FB Informa"], ["faq", "Perguntas frequentes"],
   ];
   const STATUS = { novo: "Nova", "em-atendimento": "Em atendimento", concluido: "Concluída" };
   const TITULOS = { visao: "Visão geral", temas: "Temas", agenda: "Agendamento", conteudo: "Conteúdo", mensagens: "Mensagens", seguranca: "Segurança e backup" };

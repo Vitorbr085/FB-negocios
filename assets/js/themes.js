@@ -18,7 +18,7 @@
   const TEMAS = {
     oficial: {
       nome: "Oficial", descricao: "Azul-marinho da fachada e preto da farda.",
-      amostra: ["#1c2a4b", "#0a0a0c", "#8ea6da"],
+      amostra: ["#1f3a8a", "#05070c", "#7aa7ff"],
       logo: ["#34497D", "#141E38"], extra: null, efeito: null,
       aviso: "", cores: null, claro: null,
     },
@@ -118,23 +118,27 @@
   }
 
   const EXTRAS = {
-    gorro: `<g transform="rotate(-14 160 40)">
-        <path d="M70 52 C95 -10 185 -48 262 -22 C300 -8 318 20 322 46 C300 30 280 26 262 30 C236 6 190 4 150 22 Z" fill="#d21f3c"/>
-        <path d="M262 -22 C300 -8 318 20 322 46" fill="none" stroke="#a5122b" stroke-width="6"/>
-        <circle cx="322" cy="50" r="24" fill="#fff"/>
-        <rect x="52" y="40" width="226" height="40" rx="20" fill="#fff"/>
+    // Chapéus no tamanho da sigla: a aba se apoia no topo do "FB" (y ≈ 80)
+    gorro: `<g>
+        <path d="M100 82 C104 40 136 12 180 8 C214 5 240 20 252 46 C258 60 260 76 258 92 C250 76 240 64 226 58 C230 66 230 74 226 82 Z" fill="#000" opacity=".28"/>
+        <path d="M100 76 C104 34 136 6 180 2 C214 -1 240 14 252 40 C258 54 260 70 258 86 C250 70 240 58 226 52 C230 60 230 68 226 76 Z" fill="#e3263f" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M180 2 C214 -1 240 14 252 40 C258 54 260 70 258 86 C252 76 246 68 238 62" fill="none" stroke="#a5122b" stroke-width="4"/>
+        <path d="M128 20 C150 6 172 2 190 4" fill="none" stroke="#ff6b7d" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+        <circle cx="258" cy="92" r="15" fill="#fff"/>
+        <rect x="88" y="70" width="146" height="28" rx="14" fill="#000" opacity=".25"/><rect x="88" y="66" width="146" height="28" rx="14" fill="#fff"/>
+        <path d="M96 74 h130" stroke="#e8e8e8" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9"/>
       </g>`,
     "chapeu-palha": `<g>
-        <ellipse cx="160" cy="44" rx="176" ry="34" fill="#e9c46a" stroke="#b5892f" stroke-width="5"/>
-        <path d="M88 44 C88 -40 232 -40 232 44 Z" fill="#f4d58d" stroke="#b5892f" stroke-width="5"/>
-        <path d="M90 30 C130 40 190 40 230 30 L232 44 C190 54 130 54 88 44 Z" fill="#d00000"/>
-        <rect x="186" y="-14" width="22" height="18" rx="3" fill="#3a86ff" transform="rotate(12 197 -5)"/>
+        <ellipse cx="160" cy="84" rx="100" ry="18" fill="#e9c46a" stroke="#b5892f" stroke-width="4"/>
+        <path d="M116 84 C114 30 206 30 204 84 Z" fill="#f4d58d" stroke="#b5892f" stroke-width="4"/>
+        <path d="M117 70 C140 77 180 77 203 70 L204 84 C180 92 140 92 116 84 Z" fill="#d00000"/>
+        <rect x="178" y="42" width="14" height="12" rx="2" fill="#3a86ff" transform="rotate(12 185 48)"/>
       </g>`,
-    "chapeu-bruxa": `<g transform="rotate(-10 160 40)">
-        <ellipse cx="160" cy="48" rx="170" ry="30" fill="#2b1740" stroke="#ff7518" stroke-width="4"/>
-        <path d="M84 48 C120 10 150 -40 178 -96 C196 -70 206 -30 236 48 Z" fill="#3a1d57"/>
-        <path d="M104 32 C140 44 200 44 226 32 L236 48 C196 60 126 60 84 48 Z" fill="#ff7518"/>
-        <rect x="146" y="30" width="26" height="22" rx="4" fill="none" stroke="#a3e635" stroke-width="5"/>
+    "chapeu-bruxa": `<g transform="rotate(-8 160 84)">
+        <ellipse cx="160" cy="86" rx="104" ry="17" fill="#2b1740" stroke="#ff7518" stroke-width="3"/>
+        <path d="M118 86 C134 56 150 24 168 -14 C176 0 184 8 200 4 C190 24 196 52 204 86 Z" fill="#3a1d57"/>
+        <path d="M121 74 C144 82 180 82 202 74 L204 86 C180 96 140 96 118 86 Z" fill="#ff7518"/>
+        <rect x="150" y="73" width="20" height="17" rx="3" fill="none" stroke="#a3e635" stroke-width="4"/>
       </g>`,
     confete: [...Array(14)].map((_, k) => {
       const a = (k / 14) * Math.PI * 2, r = 182, x = 160 + Math.cos(a) * r, y = 160 + Math.sin(a) * r;
@@ -145,7 +149,8 @@
   };
 
   function svgLogo(t, d) {
-    const vb = t.extra ? "-40 -80 400 400" : "0 0 320 320";
+    // chapéus ocupam só uma faixa acima do círculo (a logo quase não encolhe); o confete fica em volta
+    const vb = !t.extra ? "0 0 320 320" : t.extra === "confete" ? "-40 -40 400 400" : "-6 -26 332 352";
     const marca = d ? `<g transform="translate(160 160) scale(.78) translate(-160 -160)"><path fill="#fff" fill-rule="evenodd" d="${d}"/></g>` : "";
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t.logo[0]}"/><stop offset="1" stop-color="${t.logo[1]}"/></linearGradient></defs><circle cx="160" cy="160" r="160" fill="url(#g)"/>${marca}${t.extra ? EXTRAS[t.extra] : ""}</svg>`;
   }
@@ -233,6 +238,112 @@
         const r = hero.getBoundingClientRect();
         lt.style.setProperty("--x", `${e.clientX - r.left}px`); lt.style.setProperty("--y", `${e.clientY - r.top}px`);
       });
+    }
+  }
+
+  /* ---------------------------------------------------------------
+     Personagens dos temas (bonecos de neve, abóboras, fantasminhas,
+     espantalhos, milhos, fogueiras e máscaras) — SVG desenhado aqui
+     --------------------------------------------------------------- */
+  const P = {
+    boneco: (c = "#d62839") => `<svg viewBox="0 0 120 150"><ellipse cx="60" cy="144" rx="42" ry="6" fill="#000" opacity=".18"/>
+      <path d="M22 70 L4 52 M10 58 L4 66 M98 70 L116 50 M110 56 L118 62" stroke="#6b4423" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <circle cx="60" cy="112" r="32" fill="#f5f9ff" stroke="#c9d6ea" stroke-width="2"/><circle cx="60" cy="70" r="24" fill="#f5f9ff" stroke="#c9d6ea" stroke-width="2"/>
+      <circle cx="60" cy="34" r="19" fill="#f5f9ff" stroke="#c9d6ea" stroke-width="2"/>
+      <path d="M44 48 C52 56 68 56 76 48 L78 56 C68 64 52 64 42 56 Z" fill="${c}"/><path d="M68 56 L74 82 L64 80 L62 58 Z" fill="${c}"/>
+      <rect x="42" y="2" width="36" height="22" rx="3" fill="#1d1d2b"/><rect x="34" y="21" width="52" height="6" rx="3" fill="#1d1d2b"/><rect x="42" y="16" width="36" height="5" fill="${c}"/>
+      <circle cx="53" cy="31" r="2.8" fill="#1d1d2b"/><circle cx="67" cy="31" r="2.8" fill="#1d1d2b"/><path d="M60 36 L78 40 L60 41 Z" fill="#ff8c1a"/>
+      <path d="M51 44 Q60 49 69 44" stroke="#1d1d2b" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-dasharray="1 4"/>
+      <circle cx="60" cy="70" r="3" fill="#1d1d2b"/><circle cx="60" cy="84" r="3" fill="#1d1d2b"/><circle cx="60" cy="104" r="3" fill="#1d1d2b"/>
+      <circle cx="48" cy="40" r="3" fill="#ff9aa2" opacity=".6"/><circle cx="72" cy="40" r="3" fill="#ff9aa2" opacity=".6"/></svg>`,
+    pinheiro: () => `<svg viewBox="0 0 100 150"><rect x="44" y="118" width="12" height="22" fill="#6b4423"/>
+      <path d="M50 6 L82 56 H64 L90 92 H68 L96 126 H4 L32 92 H10 L36 56 H18 Z" fill="#1f7a4c" stroke="#145a37" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M20 125 Q50 112 80 124 M28 90 Q50 80 72 90 M34 55 Q50 48 66 55" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+      <circle cx="40" cy="74" r="4" fill="#ffd23f"/><circle cx="64" cy="106" r="4" fill="#e63946"/><circle cx="36" cy="110" r="4" fill="#3a86ff"/><circle cx="60" cy="68" r="4" fill="#e63946"/>
+      <path d="M50 0 L53 8 L61 8 L55 13 L57 21 L50 16 L43 21 L45 13 L39 8 L47 8 Z" fill="#ffd23f"/></svg>`,
+    presente: (a = "#e63946", b = "#ffd23f") => `<svg viewBox="0 0 80 80"><rect x="8" y="30" width="64" height="46" rx="4" fill="${a}"/><rect x="4" y="22" width="72" height="14" rx="3" fill="${a}" stroke="#0002"/>
+      <rect x="35" y="22" width="10" height="54" fill="${b}"/><path d="M40 22 C26 4 14 14 26 22 M40 22 C54 4 66 14 54 22" stroke="${b}" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`,
+    abobora: (olho = "#ffd43b") => `<svg viewBox="0 0 120 110"><ellipse cx="60" cy="104" rx="44" ry="5" fill="#000" opacity=".22"/>
+      <path d="M58 18 C56 8 62 2 70 4 C66 8 64 14 66 20 Z" fill="#3f7d20"/>
+      <ellipse cx="38" cy="62" rx="26" ry="38" fill="#e8590c"/><ellipse cx="82" cy="62" rx="26" ry="38" fill="#e8590c"/><ellipse cx="60" cy="62" rx="30" ry="42" fill="#ff7518"/>
+      <path d="M60 22 C50 40 50 84 60 102 M60 22 C70 40 70 84 60 102" stroke="#d9480f" stroke-width="2" fill="none" opacity=".6"/>
+      <g class="fx-char__glow" fill="${olho}"><path d="M36 50 L48 62 H30 Z"/><path d="M84 50 L90 62 H72 Z"/><path d="M58 64 L64 72 H52 Z"/>
+      <path d="M30 78 L38 84 L44 78 L52 86 L60 78 L68 86 L76 78 L82 84 L90 78 C84 94 36 94 30 78 Z"/></g></svg>`,
+    fantasma: () => `<svg viewBox="0 0 100 130"><ellipse cx="50" cy="126" rx="26" ry="4" fill="#000" opacity=".18"/>
+      <path d="M14 112 V52 C14 22 30 6 50 6 C70 6 86 22 86 52 V112 L76 102 L66 112 L56 102 L46 112 L36 102 L26 112 L14 102 Z" fill="#f8f9ff" opacity=".95"/>
+      <path d="M14 70 C2 66 0 54 6 50 M86 70 C98 64 100 52 94 48" stroke="#f8f9ff" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <ellipse cx="38" cy="50" rx="6" ry="9" fill="#2b1740"/><ellipse cx="62" cy="50" rx="6" ry="9" fill="#2b1740"/><circle cx="40" cy="47" r="2" fill="#fff"/><circle cx="64" cy="47" r="2" fill="#fff"/>
+      <ellipse cx="50" cy="70" rx="6" ry="8" fill="#2b1740"/><circle cx="30" cy="62" r="4" fill="#ffadc6" opacity=".7"/><circle cx="70" cy="62" r="4" fill="#ffadc6" opacity=".7"/></svg>`,
+    lapide: () => `<svg viewBox="0 0 80 90"><path d="M10 86 V36 C10 14 70 14 70 36 V86 Z" fill="#6c6a7e" stroke="#4a4858" stroke-width="3"/>
+      <text x="40" y="52" font-size="16" font-weight="800" text-anchor="middle" fill="#3a3848" font-family="sans-serif">RIP</text><path d="M4 86 H76" stroke="#3f7d20" stroke-width="6" stroke-linecap="round"/></svg>`,
+    espantalho: () => `<svg viewBox="0 0 130 170"><ellipse cx="65" cy="166" rx="30" ry="4" fill="#000" opacity=".2"/>
+      <rect x="61" y="60" width="8" height="106" fill="#7a4e2a"/><rect x="10" y="66" width="110" height="8" rx="3" fill="#7a4e2a"/>
+      <path d="M8 66 L0 58 M8 74 L0 80 M122 66 L130 58 M122 74 L130 80" stroke="#e9c46a" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 64 H100 L106 80 L92 82 L90 128 H40 L38 82 L24 80 Z" fill="#3a86ff"/>
+      <path d="M40 64 V128 M52 64 V128 M64 64 V128 M76 64 V128 M88 64 V128 M36 80 H94 M38 96 H92 M40 112 H90" stroke="#e63946" stroke-width="3" opacity=".75"/>
+      <rect x="70" y="96" width="16" height="14" fill="#f4a261" stroke="#7a4e2a" stroke-dasharray="3 2"/>
+      <path d="M44 128 L40 142 M54 128 L52 144 M76 128 L78 144 M86 128 L90 142" stroke="#e9c46a" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="65" cy="42" r="22" fill="#e9c46a" stroke="#b5892f" stroke-width="2"/>
+      <path d="M56 38 L62 44 M62 38 L56 44 M68 38 L74 44 M74 38 L68 44" stroke="#3a2a1a" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M54 52 Q65 60 76 52" stroke="#3a2a1a" stroke-width="2.4" fill="none" stroke-dasharray="3 3"/>
+      <ellipse cx="65" cy="24" rx="40" ry="8" fill="#d4a24c" stroke="#9c6f22" stroke-width="2"/><path d="M44 24 C44 2 86 2 86 24 Z" fill="#e9b85a" stroke="#9c6f22" stroke-width="2"/>
+      <path d="M45 20 C56 24 74 24 85 20 L86 24 C74 28 56 28 44 24 Z" fill="#e63946"/></svg>`,
+    milho: () => `<svg viewBox="0 0 70 140"><path d="M35 132 C10 110 4 70 18 40 C22 80 30 110 35 132 Z" fill="#52b043"/><path d="M35 132 C60 110 66 70 52 40 C48 80 40 110 35 132 Z" fill="#3f8f33"/>
+      <ellipse cx="35" cy="62" rx="16" ry="46" fill="#ffd23f" stroke="#e0a800" stroke-width="2"/>
+      <g fill="#ffe680" stroke="#e0a800" stroke-width=".8">${[...Array(9)].map((_, r) => [...Array(3)].map((_, k) => `<ellipse cx="${27 + k * 8}" cy="${26 + r * 9}" rx="3.6" ry="4"/>`).join("")).join("")}</g>
+      <path d="M35 132 C24 120 22 100 26 86 C30 104 33 118 35 132 Z" fill="#6cc24a"/><path d="M33 16 C30 6 34 0 36 0 C38 6 38 12 36 16" stroke="#c98a2b" stroke-width="2" fill="none"/></svg>`,
+    fogueira: () => `<svg viewBox="0 0 120 130"><ellipse cx="60" cy="124" rx="46" ry="6" fill="#000" opacity=".25"/>
+      <g class="fx-char__chama"><path d="M60 8 C76 34 92 48 88 78 C86 100 72 110 60 110 C48 110 34 100 32 78 C30 56 46 46 50 26 C56 38 58 44 60 52 C62 36 60 22 60 8 Z" fill="#ff5400"/>
+      <path d="M60 34 C70 52 80 62 76 84 C74 100 66 106 60 106 C54 106 46 100 44 86 C42 70 52 62 54 48 C58 58 60 62 60 68 C62 56 60 46 60 34 Z" fill="#ffa200"/>
+      <path d="M60 62 C66 74 70 82 68 92 C66 102 62 104 60 104 C58 104 52 102 52 94 C52 84 58 80 60 62 Z" fill="#ffe066"/></g>
+      <path d="M18 116 L102 98" stroke="#7a4e2a" stroke-width="12" stroke-linecap="round"/><path d="M18 98 L102 116" stroke="#5e3a1e" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="18" cy="116" r="6" fill="#c08552"/><circle cx="102" cy="98" r="6" fill="#c08552"/></svg>`,
+    mascara: (a = "#7b2ff7", b = "#ffd23f", c = "#f72585") => `<svg viewBox="0 0 140 110">
+      <path d="M96 30 C104 6 118 -2 128 4 C118 12 112 22 108 36 Z" fill="${c}"/><path d="M100 34 C116 18 132 18 138 26 C126 28 116 34 108 42 Z" fill="#06d6a0"/>
+      <path d="M92 28 C94 10 102 0 110 0 C104 10 102 20 102 32 Z" fill="${b}"/>
+      <path d="M10 44 C10 26 32 18 50 26 C58 30 62 34 70 34 C78 34 82 30 90 26 C108 18 130 26 130 44 C130 66 110 78 92 70 C82 66 78 58 70 58 C62 58 58 66 48 70 C30 78 10 66 10 44 Z" fill="${a}" stroke="${b}" stroke-width="3"/>
+      <path d="M30 44 C34 36 46 36 52 44 C46 52 34 52 30 44 Z M88 44 C94 36 106 36 110 44 C106 52 94 52 88 44 Z" fill="#1b1030"/>
+      <circle cx="22" cy="40" r="3" fill="${b}"/><circle cx="118" cy="40" r="3" fill="${b}"/><circle cx="70" cy="44" r="3.5" fill="${c}"/>
+      <path d="M26 58 L22 104" stroke="${b}" stroke-width="4" stroke-linecap="round"/></svg>`,
+  };
+
+  function aplicarPersonagens(chave) {
+    document.querySelector(".footer")?.classList.remove("has-scene");
+    const M = {
+      natal: {
+        secoes: [["boneco", P.boneco()], ["pinheiro", P.pinheiro()], ["boneco", P.boneco("#3a86ff")], ["presente", P.presente()], ["boneco", P.boneco("#2a9d8f")], ["pinheiro", P.pinheiro()]],
+        rodape: [["pinheiro", P.pinheiro(), 120], ["presente", P.presente("#3a86ff", "#fff"), 46], ["boneco", P.boneco(), 112], ["pinheiro", P.pinheiro(), 92], ["presente", P.presente(), 52], ["boneco", P.boneco("#3a86ff"), 100], ["presente", P.presente("#2a9d8f", "#ffd23f"), 44], ["pinheiro", P.pinheiro(), 126]],
+      },
+      saojoao: {
+        secoes: [["espantalho", P.espantalho()], ["milho", P.milho()], ["fogueira", P.fogueira()], ["espantalho", P.espantalho()], ["milho", P.milho()], ["fogueira", P.fogueira()]],
+        rodape: [["milho", P.milho(), 84], ["espantalho", P.espantalho(), 124], ["milho", P.milho(), 70], ["fogueira", P.fogueira(), 104], ["milho", P.milho(), 80], ["espantalho", P.espantalho(), 116], ["milho", P.milho(), 74]],
+      },
+      halloween: {
+        secoes: [["abobora", P.abobora()], ["fantasma", P.fantasma()], ["abobora", P.abobora("#a3e635")], ["fantasma", P.fantasma()], ["lapide", P.lapide()], ["abobora", P.abobora()]],
+        rodape: [["lapide", P.lapide(), 70], ["abobora", P.abobora(), 64], ["fantasma", P.fantasma(), 104], ["abobora", P.abobora("#a3e635"), 54], ["lapide", P.lapide(), 62], ["fantasma", P.fantasma(), 90], ["abobora", P.abobora(), 70]],
+      },
+      carnaval: {
+        secoes: [["mascara", P.mascara()], ["mascara", P.mascara("#06d6a0", "#ffd23f", "#3a86ff")], ["mascara", P.mascara("#f72585", "#ffd23f", "#7b2ff7")], ["mascara", P.mascara("#ffd23f", "#f72585", "#06d6a0")], ["mascara", P.mascara("#3a86ff", "#ffd23f", "#f72585")], ["mascara", P.mascara()]],
+        rodape: [["mascara", P.mascara("#06d6a0", "#ffd23f", "#3a86ff"), 64], ["mascara", P.mascara(), 76], ["mascara", P.mascara("#f72585", "#ffd23f", "#7b2ff7"), 60], ["mascara", P.mascara("#ffd23f", "#f72585", "#06d6a0"), 82], ["mascara", P.mascara("#3a86ff", "#ffd23f", "#f72585"), 66], ["mascara", P.mascara(), 72]],
+      },
+    }[chave];
+    if (!M) return;
+    // personagens espiando nas laterais das seções (lados alternados)
+    ["#quemsomos", "#servicos", "#parceiros", "#depoimentos", "#time", "#faq"].forEach((sel, i) => {
+      const sec = document.querySelector(sel); if (!sec || !M.secoes[i]) return;
+      const [tipo, svg] = M.secoes[i];
+      const el = document.createElement("div");
+      el.className = `fx-deco fx-char fx-char--${tipo} fx-char--${i % 2 ? "dir" : "esq"}`;
+      el.setAttribute("aria-hidden", "true"); el.style.setProperty("--d", `${(i % 3) * 0.7}s`);
+      el.innerHTML = svg; sec.append(el);
+    });
+    // cena no rodapé, com chão temático
+    const footer = document.querySelector(".footer");
+    if (footer) {
+      const cena = document.createElement("div");
+      cena.className = `fx-deco fx-scene fx-scene--${chave}`; cena.setAttribute("aria-hidden", "true");
+      cena.innerHTML = M.rodape.map(([tipo, svg, h], k) => `<i class="fx-char--${tipo}" style="--h:${h}px;--d:${(k % 4) * 0.5}s">${svg}</i>`).join("");
+      footer.prepend(cena); footer.classList.add("has-scene");
     }
   }
 
@@ -413,6 +524,7 @@
     document.documentElement.classList.toggle("fx-on", querEfeitos);
     if (querEfeitos) {
       aplicarEnfeites(t, cfg || {});
+      aplicarPersonagens(atual);
       if (!reduceMotion) {
         const mult = { baixa: 0.5, media: 1, alta: 1.8 }[tc.intensidade] || 1;
         document.querySelectorAll(".hero, .cta-final__inner").forEach((el) => campos.push(new Campo(el, t.efeito, el.classList.contains("hero") ? mult : mult * 0.6)));

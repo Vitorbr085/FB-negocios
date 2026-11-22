@@ -161,7 +161,7 @@ function sanitizarConfig(c) {
     numeros: Array.isArray(c.numeros) ? c.numeros.slice(0, 6).map((n) => ({
       valor: Math.max(0, Math.min(1e9, Number(n.valor) || 0)), prefixo: clean(n.prefixo, 6), sufixo: clean(n.sufixo, 6), rotulo: clean(n.rotulo, 60),
     })) : null,
-    secoes: Object.fromEntries(["assistente", "seguranca", "parceiros", "depoimentos", "time", "bancos", "faq"].map((k) => [k, s[k] !== false])),
+    secoes: Object.fromEntries(["assistente", "seguranca", "parceiros", "depoimentos", "time", "bancos", "fbinforma", "faq"].map((k) => [k, s[k] !== false])),
     atualizadoEm: new Date().toISOString(),
   };
   return out;

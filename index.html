@@ -16,7 +16,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <script>try{var t=localStorage.getItem("fb-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 
@@ -44,7 +44,6 @@
     <p class="preloader__text">FB <span>Negócios</span></p>
   </div>
 
-  <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- Cabeçalho -->
@@ -59,6 +58,7 @@
         <a href="#servicos" class="nav__link">Serviços</a>
         <a href="#parceiros" class="nav__link">Seja parceiro</a>
         <a href="#time" class="nav__link">Time</a>
+        <a href="#fbinforma" class="nav__link nav__link--info">FB Informa <span class="nav__new" aria-label="novo">novo</span></a>
         <a href="#contato" class="nav__link">Contato</a>
         <a data-href="portal" class="nav__link nav__link--portal" target="_blank" rel="noopener">Portal FB ↗</a>
       </nav>
@@ -80,6 +80,7 @@
         <span class="blob blob--1" data-parallax="0.25"></span>
         <span class="blob blob--2" data-parallax="-0.18"></span>
         <span class="blob blob--3" data-parallax="0.12"></span>
+        <div class="hero__photos" id="heroFotos"></div>
         <div class="grid-lines"></div>
       </div>
       <div class="container hero__inner">
@@ -120,7 +121,7 @@
           </div>
           <div class="float-card float-card--c" data-parallax="-0.2">
             <span class="float-card__label">Crescimento</span>
-            <strong class="up">↑ 300%</strong>
+            <strong class="up">↑ 490%</strong>
           </div>
         </div>
       </div>
@@ -148,6 +149,7 @@
           <span class="eyebrow reveal">Sobre a FB Negócios</span>
           <h2 class="section-title reveal" id="sobreTitulo"></h2>
           <p class="reveal" id="sobreTexto"></p>
+          <p class="reveal muted" id="sobreTexto2"></p>
           <p class="reveal muted" id="missao"></p>
           <ul class="values reveal" id="valores"></ul>
           <div class="about__cta reveal">
@@ -168,9 +170,18 @@
     <!-- POR QUE A FB -->
     <section class="section why" id="porque">
       <div class="container">
-        <div class="section-head">
-          <span class="eyebrow reveal">Por que escolher a FB Negócios?</span>
-          <h2 class="section-title reveal">Nós crescemos cerca de <span class="grad">300%</span> nos últimos anos</h2>
+        <div class="why-band reveal">
+          <div class="why-band__text">
+            <span class="eyebrow">Por que escolher a FB Negócios?</span>
+            <h2 class="section-title">A melhor opção em empréstimo consignado do Brasil.</h2>
+            <ul class="why-band__checks">
+              <li><span aria-hidden="true">✓</span> Menores taxas do mercado</li>
+              <li><span aria-hidden="true">✓</span> Atendimento especializado</li>
+              <li><span aria-hidden="true">✓</span> Aprovação rápida</li>
+              <li><span aria-hidden="true">✓</span> Sem burocracia</li>
+            </ul>
+          </div>
+          <a class="btn btn--lg why-band__cta magnetic" data-wa="whatsapp" target="_blank" rel="noopener">Simule agora →</a>
         </div>
         <div class="why__grid" id="diferenciais"></div>
       </div>
@@ -347,6 +358,18 @@
         <h2 class="section-title reveal">Veja o que os nossos clientes estão comentando sobre a FB Negócios</h2>
       </div>
       <div class="marquee marquee--slow marquee--pause"><div class="marquee__track" id="depoimentos-track"></div></div>
+
+      <div class="container partners-fb">
+        <div class="partners-fb__head">
+          <div>
+            <span class="eyebrow reveal">Feedbacks de parceiros</span>
+            <h3 class="partners-fb__title reveal">Quem produz com a FB, aprova</h3>
+            <p class="muted reveal">Mensagens reais de CORBANs parceiros, direto do nosso WhatsApp.</p>
+          </div>
+          <a class="btn btn--ghost magnetic reveal" id="feedVideo" target="_blank" rel="noopener">▶ Ver depoimentos em vídeo</a>
+        </div>
+        <div class="chats" id="feedbacksParceiros"></div>
+      </div>
     </section>
 
     <!-- TIME -->
@@ -359,6 +382,8 @@
         <div class="team__grid" id="diretores"></div>
       </div>
     </section>
+
+    <!-- BASTIDORES -->
 
     <!-- PORTAIS DOS BANCOS -->
     <section class="section portals" id="bancos">
@@ -375,6 +400,24 @@
         </div>
         <div class="portals__grid" id="portais"></div>
         <p class="portals__empty" id="portaisVazio" hidden>Nenhum banco encontrado.</p>
+      </div>
+    </section>
+
+    <!-- FB INFORMA -->
+    <section class="section fbinforma" id="fbinforma">
+      <div class="container">
+        <div class="info-box reveal">
+          <div class="info-box__copy">
+            <span class="info-box__live"><i></i> Atualizado toda semana</span>
+            <h2 class="section-title" data-text="fbInforma.titulo"></h2>
+            <p data-text="fbInforma.texto"></p>
+            <div class="btn-row-site">
+              <a class="btn btn--light btn--lg magnetic" data-href="portal" target="_blank" rel="noopener">Acessar o Portal FB ↗</a>
+              <a class="btn btn--outline-light btn--lg magnetic" data-href="redes.instagram" target="_blank" rel="noopener">Seguir no Instagram</a>
+            </div>
+          </div>
+          <ul class="info-list" id="infoLista"></ul>
+        </div>
       </div>
     </section>
 
@@ -427,6 +470,7 @@
           <li><a href="#servicos">Serviços</a></li>
           <li><a href="#parceiros">Seja parceiro</a></li>
           <li><a href="#bancos">Contatos dos bancos</a></li>
+          <li><a href="#fbinforma">FB Informa</a></li>
           <li><a href="#contato">Contato</a></li>
           <li><a href="politica-de-privacidade.html">Política de Privacidade</a></li>
         </ul>
@@ -439,10 +483,6 @@
     </div>
   </footer>
 
-  <a class="wa-float magnetic" data-wa="whatsapp" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">
-    <svg viewBox="0 0 24 24"><use href="#i-whatsapp"/></svg>
-    <span class="wa-float__tip">Fale com a FB</span>
-  </a>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- Ícones -->

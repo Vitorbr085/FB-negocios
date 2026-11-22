@@ -1,6 +1,6 @@
 # FB Negócios — novo site
 
-Novo site da **FB Negócios**, promotora de crédito e correspondente bancário de Fortaleza-CE, com a nova identidade visual da marca: azul-marinho (#1C2A4B, o mesmo da fachada) e preto (#0A0A0C, o da farda).
+Novo site da **FB Negócios**, promotora de crédito e correspondente bancário de Fortaleza-CE, com a nova identidade visual da marca em **preto e azul**: preto profundo (#05070C), azul-marinho da fachada e um azul vivo nos botões e destaques (#2D5BD8 / #7AA7FF).
 
 Todo o conteúdo vem do site atual ([fbnegociosbr.com.br](https://www.fbnegociosbr.com.br)), do Instagram [@fbnegociosss](https://www.instagram.com/fbnegociosss/) e do [Linktree](https://linktr.ee/fbnegocioss).
 
@@ -11,7 +11,6 @@ Todo o conteúdo vem do site atual ([fbnegociosbr.com.br](https://www.fbnegocios
 ## ✨ O que o site tem
 
 ### 1. Microinterações
-- Cursor personalizado que cresce sobre links e botões.
 - Botões "magnéticos", que vão um pouco na direção do mouse.
 - Efeito de onda (ripple) ao clicar em qualquer botão.
 - Cards de serviço com inclinação 3D e uma luz que segue o mouse.
@@ -30,18 +29,20 @@ Todo o conteúdo vem do site atual ([fbnegociosbr.com.br](https://www.fbnegocios
 
 ### 3. Parallax
 - Manchas de cor do topo que se movem com a rolagem e com o mouse.
-- Logo em 3D que gira acompanhando o mouse, com anéis em órbita.
+- Fotos reais da equipe no topo, trocando a cada 6 s com zoom suave (sala de reunião, Comercial, Atendimento, Operacional e RH).
+- Logo em 3D no canto do topo, que gira acompanhando o mouse, com anéis em órbita e os cartões de Produção, Crescimento e Crédito em volta.
 - Cards flutuantes e fotos do "Quem somos" em camadas com velocidades diferentes.
 - Faixa gigante com textos andando em sentidos opostos.
 
 ### Seções
-Início · Bancos parceiros · Quem somos · Números · Por que a FB · Serviços · Assistente de crédito · **Para CORBANs + Digitais de Elite** · Seja parceiro (formulário) · Depoimentos · **Time de diretores (com LinkedIn)** · Portais dos bancos (com busca) · Trabalhe na FB · Perguntas frequentes · Rodapé com o aviso do BACEN · Política de Privacidade.
+Início (com fotos da equipe) · Bancos parceiros · Quem somos · Números · Por que a FB (no estilo do Portal FB) · Serviços · Assistente de crédito · É golpe ou não? · **Para CORBANs + Digitais de Elite** · Seja parceiro (formulário) · Depoimentos + **Feedbacks de parceiros** (conversas reais do WhatsApp) · **Time de diretores (com LinkedIn)** · Portais dos bancos (com busca) · **FB Informa** (conteúdos para CORBANs + Portal FB) · Perguntas frequentes · Rodapé com o aviso do BACEN · Política de Privacidade.
 
 ### Extras
 - Tema escuro (padrão) e claro, lembrados no navegador.
 - Funciona bem no celular; respeita quem ativa "reduzir movimento" no sistema.
 - SEO: título, descrição, Open Graph e dados estruturados (schema.org).
-- Botão flutuante do WhatsApp e links para Instagram, LinkedIn, TikTok, Portal FB e Comunidade do WhatsApp.
+- Links para WhatsApp, Instagram, LinkedIn, TikTok, Portal FB e Comunidade do WhatsApp.
+- Botão **FB Informa** no menu, com selo "novo".
 - Servidor Node.js **sem nenhuma dependência** que guarda as mensagens do formulário. Publicado sem servidor (GitHub Pages), o formulário envia pelo WhatsApp.
 
 ---
@@ -68,6 +69,8 @@ fb-negocios/
 │       ├── logo.svg            # logo vetorizada (FB branco em círculo azul-marinho)
 │       ├── fb-mark.svg         # só o "FB" branco
 │       ├── favicon.svg
+│       ├── topo/               # fotos do topo e do Quem somos (sala de reunião, equipe, Comercial, Atendimento)
+│       ├── bastidores/         # cenas do vídeo institucional usadas no topo (Operacional e RH)
 │       ├── time/               # fotos dos diretores
 │       ├── fotos/              # fotos do escritório
 │       └── bancos/             # logos dos bancos
@@ -115,7 +118,11 @@ Tudo fica em **`assets/js/data.js`**: telefones, WhatsApp, serviços, números, 
 },
 ```
 
-**Pontos para confirmar** (marcados com `// CONFIRMAR` no `data.js`): os e-mails. No site atual eles aparecem com erro de digitação (`contato@FB Negóciosbr.com.br`); usei `@fbnegociosbr.com.br`.
+**Contato:** o e-mail oficial é `contato@finanbankbr.com.br`. O SAC fica oculto enquanto não houver e-mail definido.
+
+**Fotos do topo:** ficam na lista `topo` do `data.js`, na ordem em que aparecem. O campo `pos` ajusta o enquadramento (ex.: `pos: "50% 40%"`).
+
+> **Atenção:** o que for salvo pelo painel administrativo (números, e-mails, telefones) vale por cima do `data.js`. Se um número ou e-mail antigo continuar aparecendo, confira o que está salvo no painel.
 
 ---
 
@@ -189,11 +196,13 @@ Tudo é salvo em `data/config.json` e o site aplica na hora. `Ctrl + S` salva.
 ### Temas sazonais
 | Tema | Efeitos |
 |---|---|
-| 🎄 **Natal** | Neve caindo no topo e na chamada final, pisca-pisca no menu, neve acumulada nos cards e gorro na logo |
-| 🎉 **Carnaval** | Confete caindo, serpentinas, explosão de confete a cada clique e confete em volta da logo |
-| 🌽 **São João** | Bandeirinhas balançando no menu, faíscas de fogueira subindo, xadrez na faixa de números e chapéu de palha na logo |
-| 🎃 **Halloween** | Morcegos voando, lua, neblina, aranha descendo, chapéu de bruxa e **modo lanterna** opcional (o cursor ilumina o topo) |
+| 🎄 **Natal** | Neve caindo no topo e na chamada final, pisca-pisca no menu, neve acumulada nos cards, gorro na logo, **bonecos de neve, pinheiros e presentes** nas seções e uma cena de neve com estrelas no rodapé |
+| 🎉 **Carnaval** | Confete caindo, serpentinas, explosão de confete a cada clique, confete em volta da logo e **máscaras de colombina** nas seções e no rodapé |
+| 🌽 **São João** | Bandeirinhas no menu e nas seções, faíscas de fogueira subindo, xadrez na faixa de números, chapéu de palha na logo e **espantalhos, milhos e fogueira acesa** nas seções e no rodapé |
+| 🎃 **Halloween** | Morcegos voando, lua, neblina, aranha descendo, chapéu de bruxa, **abóboras que brilham, fantasminhas flutuando e lápides** nas seções e no rodapé, e **modo lanterna** opcional (o cursor ilumina o topo) |
 | **Clássico** | A identidade antiga (vermelho e azul) |
+
+Em todos os temas sazonais, os títulos ganham a cor e um ícone do tema, os cards e botões ganham brilho na cor do tema e o rodapé fica temático. Os chapéus da logo têm o tamanho certo para encaixar sobre o "FB". Os personagens dão um pulinho quando o mouse passa e aparecem nas laterais em telas a partir de 1300 px.
 
 Os efeitos usam canvas leve: pausam fora da tela e com a aba escondida, são reduzidos no celular e desligados para quem ativa "reduzir movimento" no sistema. O visitante também pode pausá-los pelo botão ✨.
 
