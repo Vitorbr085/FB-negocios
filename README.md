@@ -196,13 +196,13 @@ Tudo é salvo em `data/config.json` e o site aplica na hora. `Ctrl + S` salva.
 ### Temas sazonais
 | Tema | Efeitos |
 |---|---|
-| 🎄 **Natal** | Neve caindo no topo e na chamada final, pisca-pisca no menu, neve acumulada nos cards, gorro na logo, **bonecos de neve, pinheiros e presentes** nas seções e uma cena de neve com estrelas no rodapé |
-| 🎉 **Carnaval** | Confete caindo, serpentinas, explosão de confete a cada clique, confete em volta da logo e **máscaras de colombina** nas seções e no rodapé |
-| 🌽 **São João** | Bandeirinhas no menu e nas seções, faíscas de fogueira subindo, xadrez na faixa de números, chapéu de palha na logo e **espantalhos, milhos e fogueira acesa** nas seções e no rodapé |
-| 🎃 **Halloween** | Morcegos voando, lua, neblina, aranha descendo, chapéu de bruxa, **abóboras que brilham, fantasminhas flutuando e lápides** nas seções e no rodapé, e **modo lanterna** opcional (o cursor ilumina o topo) |
+| 🎄 **Natal** | Neve caindo no topo e na chamada final, pisca-pisca no menu, neve acumulada nos cards, gorro na logo, **bonecos de neve, pinheiros e presentes** e uma cena de neve com estrelas no rodapé |
+| 🎉 **Carnaval** | Confete caindo, serpentinas, explosão de confete a cada clique, confete em volta da logo e **máscaras de colombina** |
+| 🌽 **São João** | Bandeirinhas no menu e nas seções, faíscas de fogueira subindo, xadrez na faixa de números, chapéu de palha na logo e **espantalhos, milhos e fogueira acesa** |
+| 🎃 **Halloween** | Morcegos voando, lua, neblina, aranha descendo, chapéu de bruxa, **abóboras que brilham, fantasminhas flutuando e lápides**, e **modo lanterna** opcional (o cursor ilumina o topo) |
 | **Clássico** | A identidade antiga (vermelho e azul) |
 
-Em todos os temas sazonais, os títulos ganham a cor e um ícone do tema, os cards e botões ganham brilho na cor do tema e o rodapé fica temático. Os chapéus da logo têm o tamanho certo para encaixar sobre o "FB". Os personagens dão um pulinho quando o mouse passa e aparecem nas laterais em telas a partir de 1300 px.
+Em todos os temas sazonais, os títulos ganham a cor e um ícone do tema, os cards e botões ganham brilho na cor do tema e o rodapé fica temático. Os chapéus da logo têm o tamanho certo para encaixar sobre o "FB". Os personagens aparecem em três lugares: emoldurando a chamada final (um em cada canto), sentado na faixa de números e numa cena completa no rodapé. Eles dão um pulinho quando o mouse passa.
 
 Os efeitos usam canvas leve: pausam fora da tela e com a aba escondida, são reduzidos no celular e desligados para quem ativa "reduzir movimento" no sistema. O visitante também pode pausá-los pelo botão ✨.
 

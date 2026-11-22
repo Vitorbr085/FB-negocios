@@ -309,13 +309,14 @@
 
   function aplicarPersonagens(chave) {
     document.querySelector(".footer")?.classList.remove("has-scene");
+    document.querySelectorAll(".fx-ancora").forEach((e) => e.classList.remove("fx-ancora"));
     const M = {
       natal: {
         secoes: [["boneco", P.boneco()], ["pinheiro", P.pinheiro()], ["boneco", P.boneco("#3a86ff")], ["presente", P.presente()], ["boneco", P.boneco("#2a9d8f")], ["pinheiro", P.pinheiro()]],
         rodape: [["pinheiro", P.pinheiro(), 120], ["presente", P.presente("#3a86ff", "#fff"), 46], ["boneco", P.boneco(), 112], ["pinheiro", P.pinheiro(), 92], ["presente", P.presente(), 52], ["boneco", P.boneco("#3a86ff"), 100], ["presente", P.presente("#2a9d8f", "#ffd23f"), 44], ["pinheiro", P.pinheiro(), 126]],
       },
       saojoao: {
-        secoes: [["espantalho", P.espantalho()], ["milho", P.milho()], ["fogueira", P.fogueira()], ["espantalho", P.espantalho()], ["milho", P.milho()], ["fogueira", P.fogueira()]],
+        secoes: [["milho", P.milho()], ["espantalho", P.espantalho()], ["fogueira", P.fogueira()], ["espantalho", P.espantalho()], ["milho", P.milho()], ["fogueira", P.fogueira()]],
         rodape: [["milho", P.milho(), 84], ["espantalho", P.espantalho(), 124], ["milho", P.milho(), 70], ["fogueira", P.fogueira(), 104], ["milho", P.milho(), 80], ["espantalho", P.espantalho(), 116], ["milho", P.milho(), 74]],
       },
       halloween: {
@@ -328,14 +329,20 @@
       },
     }[chave];
     if (!M) return;
-    // personagens espiando nas laterais das seções (lados alternados)
-    ["#quemsomos", "#servicos", "#parceiros", "#depoimentos", "#time", "#faq"].forEach((sel, i) => {
-      const sec = document.querySelector(sel); if (!sec || !M.secoes[i]) return;
+    // personagens em poucos lugares escolhidos: sentado na faixa de números e emoldurando a chamada final
+    const ANCORAS = [
+      [".stats", "sentado", "dir"],
+      [".cta-final__inner", "palco", "esq"],
+      [".cta-final__inner", "palco", "dir"],
+    ];
+    ANCORAS.forEach(([sel, modo, lado], i) => {
+      const alvo = document.querySelector(sel); if (!alvo || !M.secoes[i]) return;
       const [tipo, svg] = M.secoes[i];
+      alvo.classList.add("fx-ancora");
       const el = document.createElement("div");
-      el.className = `fx-deco fx-char fx-char--${tipo} fx-char--${i % 2 ? "dir" : "esq"}`;
-      el.setAttribute("aria-hidden", "true"); el.style.setProperty("--d", `${(i % 3) * 0.7}s`);
-      el.innerHTML = svg; sec.append(el);
+      el.className = `fx-deco fx-char fx-char--${tipo} fx-char--${modo} fx-char--${lado}`;
+      el.setAttribute("aria-hidden", "true"); el.style.setProperty("--d", `${(i % 3) * 0.6}s`);
+      el.innerHTML = svg; alvo.append(el);
     });
     // cena no rodapé, com chão temático
     const footer = document.querySelector(".footer");
