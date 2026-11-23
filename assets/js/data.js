@@ -62,6 +62,8 @@ window.FB_DATA = {
     valores: ["Respeito", "Transparência", "Foco no Cliente", "Trabalho em Equipe"],
     fotos: {
       principal: { local: "assets/img/topo/equipe.jpg", remota: SITE_ATUAL + "about.jpg" },
+      /* Fotos que ficam alternando no lugar da foto principal (como no topo do site). */
+      principalAlterna: ["assets/img/sobre/equipe-1.jpg", "assets/img/sobre/equipe-2.jpg"],
       sala: { local: "assets/img/fotos/sala.jpg", remota: SITE_ATUAL + "sala.jpg" },
       call: { local: "assets/img/fotos/call.jpg", remota: SITE_ATUAL + "call.jpg" },
     },

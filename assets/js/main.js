@@ -52,6 +52,19 @@
     if ($("#sobreTexto2")) $("#sobreTexto2").textContent = D.sobre.texto2 || "";
     $("#missao").textContent = E.missao;
     $("#valores").innerHTML = D.sobre.valores.map((v) => `<li>${esc(v)}</li>`).join("");
+    // Foto principal do "Quem somos": duas fotos alternando, como no topo
+    const altFotos = D.sobre.fotos.principalAlterna, altBox = $(".about__img--main");
+    if (altBox && altFotos && altFotos.length > 1) {
+      altBox.classList.add("about__img--alterna");
+      altBox.innerHTML = altFotos.map((src, i) => `<img src="${esc(src)}" alt="" class="${i === 0 ? "is-on" : ""}" />`).join("");
+      if (!reduceMotion) {
+        let k = 0;
+        setInterval(() => {
+          const f = $$("img", altBox); if (f.length < 2 || document.hidden) return;
+          f[k].classList.remove("is-on"); k = (k + 1) % f.length; f[k].classList.add("is-on");
+        }, 6000);
+      }
+    }
     $$("[data-foto]").forEach((img) => setImg(img, D.sobre.fotos[img.dataset.foto]));
 
     $("#heroAvatars").innerHTML = D.depoimentos.map((d) => `<span>${initials(d.nome)}</span>`).join("") + `<span>+</span>`;

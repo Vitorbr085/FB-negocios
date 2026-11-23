@@ -242,6 +242,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .about__img img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform 1.4s var(--ease); }
 .about__img:hover img { transform: scale(1.02); }
 .about__img--main { inset: 0 18% 14% 0; }
+.about__img--alterna img { position: absolute; inset: 0; object-position: 50% 55%; opacity: 0; transition: opacity 1.2s var(--ease), transform 1.4s var(--ease); }
+.about__img--alterna img.is-on { opacity: 1; }
 .about__img--small { width: 46%; height: 52%; right: 0; bottom: 0; border: 6px solid var(--bg); }
 .about__badge { position: absolute; left: -18px; bottom: 40px; display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 18px; background: var(--grad); color: #fff; box-shadow: var(--shadow); font-size: 13px; line-height: 1.3; }
 .about__badge img { width: 28px; }
